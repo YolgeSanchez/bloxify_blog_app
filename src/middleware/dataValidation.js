@@ -5,7 +5,7 @@ export const validateSchema = (schema) => (request, response, next) => {
   } catch ({ issues }) {
     return response.status(400).json(
       issues.map((issue) => {
-        return { message: issue.message }
+        return issue.message
       })
     )
   }
