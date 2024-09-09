@@ -4,6 +4,7 @@ import User from '../models/user.model.js'
 import encrypt from '../libs/SHA256.js'
 import { TOKEN_SECRET } from '../config.js'
 
+//login
 export const login = async (request, response) => {
   const { email, password } = request.body
 
@@ -21,6 +22,7 @@ export const login = async (request, response) => {
   response.send('logged in')
 }
 
+//register
 export const register = async (request, response) => {
   const { username, email, password } = request.body
   const hashedPassword = encrypt(password)
@@ -40,11 +42,13 @@ export const register = async (request, response) => {
   }
 }
 
+//logout
 export const logout = async (request, response) => {
   response.clearCookie('token')
   response.send('logged out')
 }
 
+//profile
 export const profile = async (request, response) => {
   console.log(request.cookies)
 
