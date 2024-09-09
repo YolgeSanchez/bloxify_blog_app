@@ -7,7 +7,6 @@ export const validToken = (request, response, next) => {
 
   jwt.verify(token, TOKEN_SECRET, (error, decoded) => {
     if (error) return response.status(401).send('Invalid token')
-    console.log(decoded)
     request.user = decoded
   })
 
