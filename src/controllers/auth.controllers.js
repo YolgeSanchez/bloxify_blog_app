@@ -13,7 +13,9 @@ export const login = async (request, response) => {
   const passwordHash = encrypt(password)
   if (passwordHash !== userFound.password) return response.send('Invalid password')
 
-  const token = jwt.sign({ username: userFound.username, email }, TOKEN_SECRET, { expiresIn: '7d' })
+  const token = jwt.sign({ id: userFound._id, username: userFound.username, email }, TOKEN_SECRET, {
+    expiresIn: '7d',
+  })
   console.log(token)
   response.cookie('token', token)
   response.send('logged in')
@@ -25,8 +27,10 @@ export const register = async (request, response) => {
   const newUser = new User({ username, email, password: hashedPassword })
 
   try {
-    await newUser.save()
-    const token = jwt.sign({ username, email }, TOKEN_SECRET, { expiresIn: '7d' })
+    const userSaved = await newUser.save()
+    const token = jwt.sign({ id: userSaved._id, username, email }, TOKEN_SECRET, {
+      expiresIn: '7d',
+    })
     console.log(token)
     response.cookie('token', token)
     response.status(201).send({ message: 'User created successfully' })
@@ -37,9 +41,22 @@ export const register = async (request, response) => {
 }
 
 export const logout = async (request, response) => {
-  response.send('hello')
+  response.clearCookie('token')
+  response.send('logged out')
 }
 
 export const profile = async (request, response) => {
-  response.send('hello')
+  console.log(request.cookies)
+
+  const { id } = request.user
+  const userFound = await User.findById(id)
+  console.log(id)
+  if (!userFound) return response.status(404).send('User not found')
+
+  return response.json({
+    id: userFound._id,
+    email: userFound.email,
+    username: userFound.username,
+    password: userFound.password,
+  })
 }
