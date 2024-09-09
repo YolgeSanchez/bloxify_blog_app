@@ -25,6 +25,14 @@ export const login = async (request, response) => {
 //register
 export const register = async (request, response) => {
   const { username, email, password } = request.body
+
+  const userFound = await User.findOne({ username })
+  if (userFound) return response.status(400).json({ message: 'This username already exists' })
+
+  const emailFound = await User.findOne({ email })
+  if (emailFound)
+    return response.status(400).json({ message: 'There is already an account with this email' })
+
   const hashedPassword = encrypt(password)
   const newUser = new User({ username, email, password: hashedPassword })
 
