@@ -1,23 +1,42 @@
 import { useForm } from 'react-hook-form'
-import { registerCall } from '../api/auth.js'
+
+import { useAuth } from '../context/AuthContext.jsx'
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function RegisterPage() {
-  const { register, handleSubmit } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
+  const { registerUser, isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  console.log(errors)
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated])
 
   const onSubmit = handleSubmit(async (user) => {
-    const result = await registerCall(user)
+    await registerUser(user)
   })
 
   return (
     <div className="registerPage">
       <form onSubmit={onSubmit}>
         <input type="text" {...register('username', { required: true })} placeholder="Username" />
+        {errors.username && <p>Username is required</p>}
         <input type="email" {...register('email', { required: true })} placeholder="E-mail" />
+        {errors.email && <p>E-mail is required</p>}
         <input
           type="password"
           {...register('password', { required: true })}
           placeholder="Password"
         />
+        {errors.password && <p>Password is required</p>}
         <button type="submit">Register</button>
       </form>
     </div>
