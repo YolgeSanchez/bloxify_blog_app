@@ -5,8 +5,8 @@ export const registerSchema = z.object({
     .string({
       required_error: 'Username is required',
     })
-    .min(3)
-    .max(64),
+    .min(3, 'Username must be at least 3 characters')
+    .max(64, 'Username cannot be greater than 64 characters'),
   email: z
     .string({
       required_error: 'Email is required',
@@ -18,7 +18,7 @@ export const registerSchema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(8),
+    .min(8, 'Password must be at least 8 characters'),
 })
 
 export const loginSchema = z.object({
@@ -31,5 +31,5 @@ export const loginSchema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(8),
+    .min(8, 'Password must be at least 8 characters'),
 })
