@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react'
-import { registerCall } from '../api/auth.js'
+import { registerCall, loginCall } from '../api/auth.js'
 
 export const AuthContext = createContext()
 
@@ -20,7 +20,18 @@ export const AuthProvider = ({ children }) => {
   const registerUser = async (user) => {
     try {
       const response = await registerCall(user)
-      const data = await response.json()
+      const data = response.data
+      setUser(data)
+      setIsAuthenticated(true)
+    } catch (error) {
+      setErrors(error.response.data)
+    }
+  }
+
+  const loginUser = async (user) => {
+    try {
+      const response = await loginCall(user)
+      const data = response.data
       setUser(data)
       setIsAuthenticated(true)
     } catch (error) {
@@ -37,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   }, [errors])
 
   return (
-    <AuthContext.Provider value={{ registerUser, user, isAuthenticated, errors }}>
+    <AuthContext.Provider value={{ registerUser, loginUser, user, isAuthenticated, errors }}>
       {children}
     </AuthContext.Provider>
   )
