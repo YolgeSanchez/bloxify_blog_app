@@ -43,7 +43,12 @@ export const register = async (request, response) => {
     })
     console.log(token)
     response.cookie('token', token)
-    response.status(201).send({ message: 'User created successfully' })
+    response.status(201).json({
+      id: userSaved._id,
+      email: userSaved.email,
+      username: userSaved.username,
+      password: userSaved.password,
+    })
   } catch (error) {
     console.log(error)
     response.status(500).send({ message: 'Error creating user' })
