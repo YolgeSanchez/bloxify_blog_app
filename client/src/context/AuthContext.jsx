@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     if (errors.length > 0) {
       setTimeout(() => {
         setErrors([])
-      }, 5000) // Clear errors after 5 seconds if there are any.
+      }, 5000)
     }
   }, [errors])
 

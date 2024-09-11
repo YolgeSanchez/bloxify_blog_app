@@ -19,7 +19,12 @@ export const login = async (request, response) => {
   })
   console.log(token)
   response.cookie('token', token)
-  response.send('logged in')
+  response.status(201).json({
+    id: userSaved._id,
+    email: userSaved.email,
+    username: userSaved.username,
+    password: userSaved.password,
+  })
 }
 
 //register
