@@ -13,7 +13,7 @@ app.use(morgan('dev'))
 app.use(cookieParser())
 
 //routes
-app.use(authRoutes)
-app.use(postsRoutes)
+app.use('api/', authRoutes)
+app.use('api/', postsRoutes)
 
 export default app
