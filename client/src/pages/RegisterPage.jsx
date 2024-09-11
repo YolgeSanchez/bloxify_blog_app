@@ -10,13 +10,11 @@ function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { registerUser, isAuthenticated } = useAuth()
+  const { registerUser, isAuthenticated, errors: registerErrors } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/')
-    }
+    if (isAuthenticated) navigate('/')
   }, [isAuthenticated])
 
   const onSubmit = handleSubmit(async (user) => {
@@ -26,6 +24,11 @@ function RegisterPage() {
   return (
     <div className="registerPage">
       <form onSubmit={onSubmit}>
+        {registerErrors.map((error, i) => (
+          <div className="error" key={i}>
+            {error}
+          </div>
+        ))}
         <input type="text" {...register('username', { required: true })} placeholder="Username" />
         {errors.username && <p>Username is required</p>}
         <input type="email" {...register('email', { required: true })} placeholder="E-mail" />
