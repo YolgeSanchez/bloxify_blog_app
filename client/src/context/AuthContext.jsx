@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from 'react'
+import { createContext, useState, useContext, useEffect } from 'react'
 import { registerCall } from '../api/auth.js'
 
 export const AuthContext = createContext()
@@ -27,6 +27,14 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data)
     }
   }
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      setTimeout(() => {
+        setErrors([])
+      }, 5000) // Clear errors after 5 seconds if there are any.
+    }
+  }, [errors])
 
   return (
     <AuthContext.Provider value={{ registerUser, user, isAuthenticated, errors }}>
