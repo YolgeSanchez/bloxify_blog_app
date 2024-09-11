@@ -1,3 +1,4 @@
+import axios from 'axios'
 const API = 'http://localhost:3000/api'
 
 export const registerCall = async (user) => {
@@ -14,3 +15,5 @@ export const registerCall = async (user) => {
 
   return data
 }
+
+export const axiosRegister = (user) => axios.post(`${API}/register`, user)

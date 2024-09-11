@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from 'react'
-import { registerCall } from '../api/auth.js'
+import { axiosRegister, registerCall } from '../api/auth.js'
 
 export const AuthContext = createContext()
 
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const registerUser = async (user) => {
     try {
-      const result = await registerCall(user)
+      const result = await axiosRegister(user)
       console.log(result)
       setUser(result)
       setIsAuthenticated(true)

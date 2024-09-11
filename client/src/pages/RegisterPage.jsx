@@ -12,7 +12,6 @@ function RegisterPage() {
   } = useForm()
   const { registerUser, isAuthenticated } = useAuth()
   const navigate = useNavigate()
-  console.log(errors)
 
   useEffect(() => {
     if (isAuthenticated) {
