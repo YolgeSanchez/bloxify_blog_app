@@ -1,7 +1,24 @@
+import { useForm } from 'react-hook-form'
+
 function RegisterPage() {
+  const { register, handleSubmit } = useForm()
+
+  const onSubmit = handleSubmit(async (values) => {
+    console.log(values)
+  })
+
   return (
     <div className="registerPage">
-      <h1>Register</h1>
+      <form onSubmit={onSubmit}>
+        <input type="text" {...register('username', { required: true })} placeholder="Username" />
+        <input type="email" {...register('email', { required: true })} placeholder="E-mail" />
+        <input
+          type="password"
+          {...register('password', { required: true })}
+          placeholder="Password"
+        />
+        <button type="submit">Register</button>
+      </form>
     </div>
   )
 }
