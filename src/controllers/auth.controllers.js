@@ -27,11 +27,10 @@ export const register = async (request, response) => {
   const { username, email, password } = request.body
 
   const userFound = await User.findOne({ username })
-  if (userFound) return response.status(500).json({ message: 'This username already exists' })
+  if (userFound) return response.status(500).json(['This username already exists'])
 
   const emailFound = await User.findOne({ email })
-  if (emailFound)
-    return response.status(500).json({ message: 'There is already an account with this email' })
+  if (emailFound) return response.status(500).json(['There is already an account with this email'])
 
   const hashedPassword = encrypt(password)
   const newUser = new User({ username, email, password: hashedPassword })
@@ -51,7 +50,7 @@ export const register = async (request, response) => {
     })
   } catch (error) {
     console.log(error)
-    response.status(500).send({ message: 'Error creating user' })
+    response.status(500).send(['Error creating user'])
   }
 }
 
