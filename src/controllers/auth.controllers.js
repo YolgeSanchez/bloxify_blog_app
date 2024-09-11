@@ -20,10 +20,10 @@ export const login = async (request, response) => {
   console.log(token)
   response.cookie('token', token)
   response.status(201).json({
-    id: userSaved._id,
-    email: userSaved.email,
-    username: userSaved.username,
-    password: userSaved.password,
+    id: userFound._id,
+    email: userFound.email,
+    username: userFound.username,
+    password: userFound.password,
   })
 }
 
