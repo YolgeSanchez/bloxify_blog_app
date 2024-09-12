@@ -9,7 +9,12 @@ import postsRoutes from './routes/posts.routes.js'
 const app = e()
 
 // basic middleware
-app.use(cors())
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // allow requests from this origin
+    credentials: true, // allow cookies
+  })
+)
 app.use(e.json())
 app.use(morgan('dev'))
 app.use(cookieParser())
