@@ -43,8 +43,13 @@ export const addPost = async (request, response) => {
 // delete a post
 export const deletePost = async (request, response) => {
   const { id } = request.params
+  const user = request.user.id
+
   const post = await Blog.findByIdAndDelete(id)
-  if (!post) return response.status(404).json({ message: 'Not found' })
+  if (!post) return response.status(404).json(['Blog not found'])
+  const userFound = await User.findById(user)
+  userFound.blogsCount--
+  await User.findByIdAndUpdate(user, userFound, { new: true })
   return response.sendStatus(204)
 }
 
