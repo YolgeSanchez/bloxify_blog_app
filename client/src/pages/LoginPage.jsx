@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function LoginPage() {
   const {
@@ -39,6 +40,9 @@ function LoginPage() {
         {errors.password && <p>Password is required</p>}
         <button type="submit">Login</button>
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 function RegisterPage() {
   const {
@@ -41,6 +42,9 @@ function RegisterPage() {
         {errors.password && <p>Password is required</p>}
         <button type="submit">Register</button>
       </form>
+      <p>
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
   )
 }
