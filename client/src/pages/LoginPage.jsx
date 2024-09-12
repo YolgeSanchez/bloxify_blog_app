@@ -30,7 +30,7 @@ function LoginPage() {
             {error}
           </div>
         ))}
-        <input type="email" {...register('email', { required: true })} placeholder="E-mail" />
+        <input type="text" {...register('email', { required: true })} placeholder="E-mail" />
         {errors.email && <p>E-mail is required</p>}
         <input
           type="password"
