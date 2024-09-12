@@ -11,7 +11,7 @@ const app = e()
 // basic middleware
 app.use(
   cors({
-    origin: 'http://localhost:3000', // allow requests from this origin
+    origin: 'http://localhost:5173', // allow requests from this origin
     credentials: true, // allow cookies
   })
 )
