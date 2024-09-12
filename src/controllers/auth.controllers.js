@@ -23,7 +23,6 @@ export const login = async (request, response) => {
     id: userFound._id,
     email: userFound.email,
     username: userFound.username,
-    password: userFound.password,
   })
 }
 
@@ -51,7 +50,6 @@ export const register = async (request, response) => {
       id: userSaved._id,
       email: userSaved.email,
       username: userSaved.username,
-      password: userSaved.password,
     })
   } catch (error) {
     console.log(error)
