@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  likedBlogs: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Blog',
+    default: [],
+  },
 })
 
 export default mongoose.model('User', userSchema)
