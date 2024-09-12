@@ -16,9 +16,9 @@ const router = Router()
 
 router.get('/posts', validToken, getPosts)
 router.get('/posts/:id', validToken, getPost)
-router.put('/posts/:id/like', validToken, changeLike)
 router.post('/posts', validToken, validateSchema(createBlogSchema), addPost)
 router.delete('/posts/:id', validToken, deletePost)
 router.put('/posts/:id', validToken, updatePost)
+router.put('/posts/like/:id', validToken, changeLike)
 
 export default router
