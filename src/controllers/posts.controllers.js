@@ -21,8 +21,12 @@ export const getPost = async (request, response) => {
 export const addPost = async (request, response) => {
   const { title, description } = request.body
   const user = request.user.id
+  const userFound = await User.findById(user)
+  if (!userFound) return response.status(404).json({ message: 'User not found' })
+  userFound.blogsCount++
   const post = new Blog({ title, description, user })
   try {
+    await User.findByIdAndUpdate(user, userFound, { new: true })
     const savedPost = await post.save()
     response.json({
       id: savedPost._id,
