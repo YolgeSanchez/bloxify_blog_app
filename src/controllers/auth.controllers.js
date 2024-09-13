@@ -76,7 +76,8 @@ export const profile = async (request, response) => {
     id: userFound._id,
     email: userFound.email,
     username: userFound.username,
-    password: userFound.password,
+    posts: userFound.blogsCount,
+    likes: userFound.likedBlogs,
   })
 }
 
