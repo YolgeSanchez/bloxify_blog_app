@@ -30,12 +30,18 @@ function LoginPage() {
             {error}
           </div>
         ))}
-        <input type="text" {...register('email', { required: true })} placeholder="E-mail" />
+        <input
+          type="text"
+          {...register('email', { required: true })}
+          placeholder="E-mail"
+          autoComplete="off"
+        />
         {errors.email && <p>E-mail is required</p>}
         <input
           type="password"
           {...register('password', { required: true })}
           placeholder="Password"
+          autoComplete="off"
         />
         {errors.password && <p>Password is required</p>}
         <button type="submit">Login</button>

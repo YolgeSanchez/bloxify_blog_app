@@ -30,14 +30,25 @@ function RegisterPage() {
             {error}
           </div>
         ))}
-        <input type="text" {...register('username', { required: true })} placeholder="Username" />
+        <input
+          type="text"
+          {...register('username', { required: true })}
+          placeholder="Username"
+          autoComplete="off"
+        />
         {errors.username && <p>Username is required</p>}
-        <input type="email" {...register('email', { required: true })} placeholder="E-mail" />
+        <input
+          type="email"
+          {...register('email', { required: true })}
+          placeholder="E-mail"
+          autoComplete="off"
+        />
         {errors.email && <p>E-mail is required</p>}
         <input
           type="password"
           {...register('password', { required: true })}
           placeholder="Password"
+          autoComplete="off"
         />
         {errors.password && <p>Password is required</p>}
         <button type="submit">Register</button>
