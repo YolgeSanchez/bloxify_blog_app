@@ -2,9 +2,10 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 
 function ProtectedRoute() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, loading } = useAuth()
+  console.log(loading, isAuthenticated)
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (!loading && !isAuthenticated) return <Navigate to="/login" replace />
 
   return <Outlet />
 }
