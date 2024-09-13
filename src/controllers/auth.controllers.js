@@ -9,10 +9,10 @@ export const login = async (request, response) => {
   const { email, password } = request.body
 
   const userFound = await User.findOne({ email })
-  if (!userFound) return response.send('User not found')
+  if (!userFound) return response.status(404).json(['User not found'])
 
   const passwordHash = encrypt(password)
-  if (passwordHash !== userFound.password) return response.send('Invalid password')
+  if (passwordHash !== userFound.password) return response.status(401).json(['Invalid password'])
 
   const token = jwt.sign({ id: userFound._id, username: userFound.username, email }, TOKEN_SECRET, {
     expiresIn: '7d',
