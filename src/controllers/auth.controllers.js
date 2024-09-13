@@ -79,3 +79,23 @@ export const profile = async (request, response) => {
     password: userFound.password,
   })
 }
+
+// verify token
+export const verifyToken = async (request, response) => {
+  const { token } = request.cookies
+
+  if (!token) return response.status(401).json({ message: 'Unauthorized' })
+
+  jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+    if (error) return response.status(401).json({ message: 'Unauthorized' })
+
+    const userFound = await User.findById(user.id)
+    if (!userFound) return response.status(401).json({ message: 'Unauthorized' })
+
+    return response.json({
+      id: userFound._id,
+      email: userFound.email,
+      username: userFound.username,
+    })
+  })
+}
