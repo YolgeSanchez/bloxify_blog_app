@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext.jsx'
 
 function ProtectedRoute() {
   const { isAuthenticated, loading } = useAuth()
-  console.log(loading, isAuthenticated)
 
   if (!loading && !isAuthenticated) return <Navigate to="/login" replace />
 
