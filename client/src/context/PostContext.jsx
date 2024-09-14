@@ -1,4 +1,5 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useState } from 'react'
+import { postsCall } from '../api/posts.js'
 
 export const PostContext = createContext()
 
@@ -11,8 +12,22 @@ export const usePost = () => {
   return context
 }
 
-const PostContextProvider = ({ children }) => {
-  return <PostContext.Provider value={{}}>{children}</PostContext.Provider>
-}
+export const PostProvider = ({ children }) => {
+  const [errors, setErrors] = useState(null)
+  const getPosts = async () => {
+    try {
+      const response = await postsCall()
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+      setErrors(error)
+    }
+  }
 
-export default PostContextProvider
+  const value = {
+    errors,
+    getPosts,
+  }
+
+  return <PostContext.Provider value={value}>{children}</PostContext.Provider>
+}
