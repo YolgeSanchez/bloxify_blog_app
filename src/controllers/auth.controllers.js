@@ -73,7 +73,6 @@ export const profile = async (request, response) => {
   if (!userFound) return response.status(404).send('User not found')
 
   return response.json({
-    id: userFound._id,
     email: userFound.email,
     username: userFound.username,
     posts: userFound.blogsCount,
