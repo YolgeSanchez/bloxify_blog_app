@@ -12,11 +12,11 @@ import PostFormPage from './pages/PostFormPage.jsx'
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <PostProvider>
+      <PostProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<HomePage />} />
               <Route path="/posts" element={<h1>Posts</h1>} />
@@ -24,9 +24,9 @@ function App() {
               <Route path="/posts/:id" element={<PostFormPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
-          </PostProvider>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </PostProvider>
     </AuthProvider>
   )
 }
