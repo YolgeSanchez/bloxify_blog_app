@@ -17,7 +17,8 @@ export const PostProvider = ({ children }) => {
   const getPosts = async () => {
     try {
       const response = await postsCall()
-      console.log(response)
+      const data = response.data
+      return data
     } catch (error) {
       console.log(error)
       setErrors(error)
