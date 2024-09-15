@@ -77,7 +77,7 @@ export const profile = async (request, response) => {
     ],
   })
   console.log(id)
-  if (!userFound) return response.status(404).send('User not found')
+  if (!userFound) return response.status(404).json(['User not found'])
 
   console.log(userFound.likedBlogs.length, userFound.likedBlogs)
 
