@@ -8,6 +8,7 @@ import LoginPage from './pages/LoginPage.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import PostFormPage from './pages/PostFormPage.jsx'
+import LikedPostsPage from './pages/LikedPosts.jsx'
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/addPost" element={<PostFormPage />} />
               <Route path="/posts/:id" element={<PostFormPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/liked" element={<LikedPostsPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
