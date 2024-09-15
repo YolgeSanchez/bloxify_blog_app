@@ -68,7 +68,7 @@ function ProfilePage() {
                 )}
               </DialogContent>
             </Dialog>
-            <p>Created at: {createdAt}</p>
+            <p>Created at: {new Date(createdAt).toLocaleDateString()}</p>
           </div>
         ))}
       </div>
