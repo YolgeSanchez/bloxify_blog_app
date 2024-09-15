@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { usePost } from '../context/PostContext.jsx'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 function ProfilePage() {
   const { getProfile } = useAuth()
@@ -16,7 +23,6 @@ function ProfilePage() {
     async function fetchPosts() {
       const response = await getPosts()
       setPosts(response)
-      console.log(response)
     }
     fetchProfile()
     fetchPosts()
@@ -42,7 +48,26 @@ function ProfilePage() {
             <h2>{title}</h2>
             <p>{description}</p>
             <p>Posted by: {user.username}</p>
-            <p>Liked by: {likedBy.length}</p>
+            <p>heart</p>
+            <Dialog>
+              <DialogTrigger>
+                <p>{likedBy.length} likes</p>
+              </DialogTrigger>
+              <DialogContent aria-describedby={undefined}>
+                <DialogHeader>
+                  <DialogTitle className="text-center">Likes</DialogTitle>
+                </DialogHeader>
+                {likedBy.length == 0 ? (
+                  <p className="text-center">This post does not have likes yet</p>
+                ) : (
+                  likedBy.map((like) => (
+                    <div className="user" key={like._id}>
+                      {like.username}
+                    </div>
+                  ))
+                )}
+              </DialogContent>
+            </Dialog>
             <p>Created at: {createdAt}</p>
           </div>
         ))}
