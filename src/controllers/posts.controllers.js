@@ -4,7 +4,10 @@ import User from '../models/user.model.js'
 // get self posts
 export const getPosts = async (request, response) => {
   const { id } = request.user
-  const posts = await await Blog.find({ user: id }).sort({ createdAt: -1 }).populate('user')
+  const posts = await Blog.find({ user: id })
+    .sort({ createdAt: -1 })
+    .populate({ path: 'user', select: '_id username' })
+    .populate({ path: 'likedBy', select: '_id username' })
   if (!posts) return response.status(404).json({ message: 'No blog posted' })
   response.json(posts)
 }
