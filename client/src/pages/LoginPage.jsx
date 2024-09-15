@@ -11,7 +11,7 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { loginUser, isAuthenticated, errors: registerErrors } = useAuth()
+  const { loginUser, isAuthenticated, errors: loginErrors } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -25,7 +25,7 @@ function LoginPage() {
   return (
     <div className="registerPage">
       <form onSubmit={onSubmit}>
-        {registerErrors.map((error, i) => (
+        {loginErrors.map((error, i) => (
           <div className="error" key={i}>
             {error}
           </div>
