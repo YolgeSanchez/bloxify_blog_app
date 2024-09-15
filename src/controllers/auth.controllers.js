@@ -93,13 +93,13 @@ export const profile = async (request, response) => {
 export const verifyToken = async (request, response) => {
   const { token } = request.cookies
 
-  if (!token) return response.status(401).json({ message: 'Unauthorized' })
+  if (!token || token == '') return response.status(401).json(['Unauthorized'])
 
   jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-    if (error) return response.status(401).json({ message: 'Unauthorized' })
+    if (error) return response.status(401).json(['Unauthorized'])
 
     const userFound = await User.findById(user.id)
-    if (!userFound) return response.status(401).json({ message: 'Unauthorized' })
+    if (!userFound) return response.status(401).json(['Unauthorized'])
 
     return response.json({
       id: userFound._id,
