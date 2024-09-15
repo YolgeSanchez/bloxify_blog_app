@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { usePost } from '../context/PostContext.jsx'
+import { Link } from 'react-router-dom'
 import {
   Dialog,
   DialogContent,
@@ -37,7 +38,9 @@ function ProfilePage() {
           <>
             <p>Username: {profile.username}</p>
             <p>Email: {profile.email}</p>
-            <p>Likes: {profile.likes.length}</p>
+            <Link to="/profile/liked">
+              <p>Likes: {profile.likes.length}</p>
+            </Link>
             <p>Posts: {profile.posts}</p>
           </>
         )}
