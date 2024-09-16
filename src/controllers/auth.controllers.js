@@ -53,14 +53,14 @@ export const register = async (request, response) => {
     })
   } catch (error) {
     console.log(error)
-    response.status(500).send(['Error creating user'])
+    response.status(500).json(['Error creating user'])
   }
 }
 
 //logout
 export const logout = async (request, response) => {
   response.clearCookie('token')
-  response.send('logged out')
+  response.json(['logged out'])
 }
 
 //profile
@@ -72,8 +72,8 @@ export const profile = async (request, response) => {
     path: 'likedBlogs',
     select: '_id title description createdAt likes user likedBy ',
     populate: [
-      { path: 'user', select: '_id username' },
-      { path: 'likedBy', select: '_id username' },
+      { path: 'user', select: '-_id username' },
+      { path: 'likedBy', select: '-_id username' },
     ],
   })
   console.log(id)
