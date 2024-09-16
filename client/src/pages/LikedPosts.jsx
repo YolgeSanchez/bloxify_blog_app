@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext.jsx'
+import { useAuth } from '@/context/AuthContext'
 import { Link } from 'react-router-dom'
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
 function LikedPostsPage() {
   const { getProfile } = useAuth()
   const [profile, setProfile] = useState({})
-  const [likes, setLikes] = useState([])
+  const [likedPosts, setLikes] = useState([])
 
   useEffect(() => {
     async function fetchProfile() {
@@ -40,7 +40,7 @@ function LikedPostsPage() {
         )}
       </div>
       <div className="posts">
-        {likes.map(({ _id, title, description, createdAt, user, likedBy }) => (
+        {likedPosts.map(({ _id, title, description, createdAt, user, likedBy, likes }) => (
           <div key={_id} className="post">
             <h2>{title}</h2>
             <p>{description}</p>
@@ -48,7 +48,7 @@ function LikedPostsPage() {
             <p>heart</p>
             <Dialog>
               <DialogTrigger>
-                <p>{likedBy.length} likes</p>
+                <p>{likes} likes</p>
               </DialogTrigger>
               <DialogContent aria-describedby={undefined}>
                 <DialogHeader>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useAuth } from '../context/AuthContext.jsx'
-import { usePost } from '../context/PostContext.jsx'
+import { useAuth } from '@/context/AuthContext'
+import { usePost } from '@/context/PostContext'
 import { Link } from 'react-router-dom'
 import {
   Dialog,
@@ -46,7 +46,7 @@ function ProfilePage() {
         )}
       </div>
       <div className="posts">
-        {posts.map(({ _id, title, description, createdAt, user, likedBy }) => (
+        {posts.map(({ _id, title, description, createdAt, user, likedBy, likes }) => (
           <div key={_id} className="post">
             <h2>{title}</h2>
             <p>{description}</p>
@@ -54,7 +54,7 @@ function ProfilePage() {
             <p>heart</p>
             <Dialog>
               <DialogTrigger>
-                <p>{likedBy.length} likes</p>
+                <p>{likes} likes</p>
               </DialogTrigger>
               <DialogContent aria-describedby={undefined}>
                 <DialogHeader>
