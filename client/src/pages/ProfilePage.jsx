@@ -64,7 +64,7 @@ function ProfilePage() {
                   <p className="text-center">This post does not have likes yet</p>
                 ) : (
                   likedBy.map((like) => (
-                    <div className="user" key={like._id}>
+                    <div className="user" key={like.username}>
                       {like.username}
                     </div>
                   ))
