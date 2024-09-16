@@ -46,7 +46,7 @@ export const getFeed = async (request, response) => {
 
   response.json(
     sortedPost.map(({ post }) => ({
-      id: post._id,
+      _id: post._id,
       title: post.title,
       description: post.description,
       user: post.user,
