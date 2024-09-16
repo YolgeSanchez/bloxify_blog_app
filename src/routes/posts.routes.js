@@ -4,6 +4,7 @@ import { validToken } from '../middleware/validateToken.js'
 import {
   getPost,
   getPosts,
+  getFeed,
   addPost,
   deletePost,
   updatePost,
@@ -15,6 +16,7 @@ import { createBlogSchema } from '../schema/blog.schema.js'
 const router = Router()
 
 router.get('/posts', validToken, getPosts)
+router.get('/feed', validToken, getFeed)
 router.get('/posts/:id', validToken, getPost)
 router.put('/posts/:id/like', validToken, changeLike)
 router.post('/posts', validToken, validateSchema(createBlogSchema), addPost)
