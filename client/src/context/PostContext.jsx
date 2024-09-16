@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import { postsCall } from '../api/posts.js'
+import { feedCall, postsCall } from '../api/posts.js'
 
 export const PostContext = createContext()
 
@@ -14,20 +14,33 @@ export const usePost = () => {
 
 export const PostProvider = ({ children }) => {
   const [errors, setErrors] = useState(null)
+
   const getPosts = async () => {
     try {
       const response = await postsCall()
       const data = response.data
       return data
     } catch (error) {
-      console.log(error)
-      setErrors(error)
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
+  const getFeed = async () => {
+    try {
+      const response = await feedCall()
+      const data = response.data
+      return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
     }
   }
 
   const value = {
     errors,
     getPosts,
+    getFeed,
   }
 
   return <PostContext.Provider value={value}>{children}</PostContext.Provider>
