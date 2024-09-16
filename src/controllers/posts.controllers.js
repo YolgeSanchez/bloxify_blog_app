@@ -12,6 +12,47 @@ export const getPosts = async (request, response) => {
   response.json(posts)
 }
 
+// get the user feed
+export const getFeed = async (request, response) => {
+  const { id } = request.user
+
+  const userFound = await User.findById(id)
+  if (!userFound) response.status(404).json(['User not found'])
+
+  const posts = await Blog.find()
+    .where('user')
+    .ne(id)
+    .where('likedBy')
+    .ne(id)
+    .populate([
+      { path: 'user', select: '_id username' },
+      { path: 'likedBy', select: '_id username' },
+    ])
+  if (!posts) return response.status(404).json(['No posts found'])
+
+  const now = Date.now()
+  const alpha = 0.9
+  const sortedPost = posts
+    .map((post) => ({
+      post,
+      score:
+        (1 - alpha) * post.likes + alpha * (1 / (1 + (now - new Date(post.createdAt).getTime()))),
+    }))
+    .sort((a, b) => b.score - a.score)
+
+  response.json(
+    sortedPost.map(({ post }) => ({
+      id: post._id,
+      title: post.title,
+      description: post.description,
+      user: post.user,
+      createdAt: post.createdAt,
+      likes: post.likes,
+      likedBy: post.likedBy,
+    }))
+  )
+}
+
 // get specific post
 export const getPost = async (request, response) => {
   const { id } = request.params
@@ -24,10 +65,13 @@ export const getPost = async (request, response) => {
 export const addPost = async (request, response) => {
   const { title, description } = request.body
   const user = request.user.id
+
   const userFound = await User.findById(user)
   if (!userFound) return response.status(404).json({ message: 'User not found' })
+
   userFound.blogsCount++
   const post = new Blog({ title, description, user })
+
   try {
     await User.findByIdAndUpdate(user, userFound, { new: true })
     const savedPost = await post.save()
@@ -69,12 +113,6 @@ export const changeLike = async (request, response) => {
   const { id } = request.params
   const user = request.user.id
 
-  /*
-   * @field {list} BlogsLiked in User model
-   * @field {list} LikedBy in Blog model
-   * @field {number} likes in Blog model
-   */
-
   const postFound = await Blog.findById(id).populate('user')
   if (!postFound) return response.status(404).json({ message: 'Blog not found' })
 
@@ -110,8 +148,4 @@ export const changeLike = async (request, response) => {
       response.status(500).json(['Error updating post'])
     }
   }
-
-  // reviso a ver si el usuario que llamo la accion le ha dado o no like
-  // si le ha dado like entonces lo quitare
-  // si no le ha dado entonces lo agregare
 }
