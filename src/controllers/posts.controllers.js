@@ -4,11 +4,14 @@ import User from '../models/user.model.js'
 // get self posts
 export const getPosts = async (request, response) => {
   const { id } = request.user
+
   const posts = await Blog.find({ user: id })
+    .select('createdAt _id title description likes user likedBy')
     .sort({ createdAt: -1 })
-    .populate({ path: 'user', select: '_id username' })
-    .populate({ path: 'likedBy', select: '_id username' })
-  if (!posts) return response.status(404).json({ message: 'No blog posted' })
+    .populate({ path: 'user', select: '-_id username' })
+    .populate({ path: 'likedBy', select: '-_id username' })
+  if (!posts) return response.status(404).json(['No blog posted'])
+
   response.json(posts)
 }
 
@@ -25,13 +28,14 @@ export const getFeed = async (request, response) => {
     .where('likedBy')
     .ne(id)
     .populate([
-      { path: 'user', select: '_id username' },
-      { path: 'likedBy', select: '_id username' },
+      { path: 'user', select: '-_id username' },
+      { path: 'likedBy', select: '-_id username' },
     ])
   if (!posts) return response.status(404).json(['No posts found'])
 
   const now = Date.now()
   const alpha = 0.9
+
   const sortedPost = posts
     .map((post) => ({
       post,
@@ -56,8 +60,13 @@ export const getFeed = async (request, response) => {
 // get specific post
 export const getPost = async (request, response) => {
   const { id } = request.params
-  const post = await Blog.findById(id).populate('user')
-  if (!post) return response.status(404).json({ message: 'Not found' })
+
+  const post = await Blog.findById(id)
+    .select('createdAt _id title description likes user likedBy')
+    .populate('user', '-_id username')
+    .populate({ path: 'likedBy', select: '-_id username' })
+
+  if (!post) return response.status(404).json(['Not found'])
   response.json(post)
 }
 
@@ -67,7 +76,7 @@ export const addPost = async (request, response) => {
   const user = request.user.id
 
   const userFound = await User.findById(user)
-  if (!userFound) return response.status(404).json({ message: 'User not found' })
+  if (!userFound) return response.status(404).json(['User not found'])
 
   userFound.blogsCount++
   const post = new Blog({ title, description, user })
@@ -79,11 +88,13 @@ export const addPost = async (request, response) => {
       id: savedPost._id,
       title: savedPost.title,
       description: savedPost.description,
-      user: savedPost.user,
+      user: { username: userFound.username },
       createdAt: savedPost.createdAt,
+      likes: 0,
+      likedBy: [],
     })
   } catch (error) {
-    response.status(500).json({ message: 'Error creating post' })
+    response.status(500).json(['Error creating post'])
   }
 }
 
@@ -92,9 +103,12 @@ export const deletePost = async (request, response) => {
   const { id } = request.params
   const user = request.user.id
 
-  const post = await Blog.findByIdAndDelete(id)
-  if (!post) return response.status(404).json(['Blog not found'])
   const userFound = await User.findById(user)
+  if (!userFound) return response.status(404).json(['User not found, try'])
+
+  const post = await Blog.findOneAndDelete({ id, user })
+  if (!post) return response.status(404).json(['Blog not found'])
+
   userFound.blogsCount--
   await User.findByIdAndUpdate(user, userFound, { new: true })
   return response.sendStatus(204)
@@ -104,6 +118,10 @@ export const deletePost = async (request, response) => {
 export const updatePost = async (request, response) => {
   const { id } = request.params
   const post = await Blog.findByIdAndUpdate(id, request.body, { new: true })
+    .select('createdAt _id title description likes user likedBy')
+    .populate('user', '-_id username')
+    .populate({ path: 'likedBy', select: '-_id username' })
+
   if (!post) return response.status(404).json({ message: 'Not found' })
   response.json(post)
 }
@@ -114,10 +132,10 @@ export const changeLike = async (request, response) => {
   const user = request.user.id
 
   const postFound = await Blog.findById(id).populate('user')
-  if (!postFound) return response.status(404).json({ message: 'Blog not found' })
+  if (!postFound) return response.status(404).json(['Blog not found'])
 
   const userFound = await User.findById(user)
-  if (!userFound) return response.status(404).json({ message: 'User not found' })
+  if (!userFound) return response.status(404).json(['User not found'])
 
   const likedBy = postFound.likedBy
   const userLikes = userFound.likedBlogs
@@ -130,7 +148,21 @@ export const changeLike = async (request, response) => {
 
     try {
       const blogUpdated = await Blog.findByIdAndUpdate(id, postFound, { new: true })
+        .select('createdAt _id title description likes user likedBy')
+        .populate('user', '-_id username')
+        .populate({ path: 'likedBy', select: '-_id username' })
+
       const userUpdated = await User.findByIdAndUpdate(user, userFound, { new: true })
+        .select('-_id username likedBlogs')
+        .populate({
+          path: 'likedBlogs',
+          select: '_id title description createdAt likes user likedBy ',
+          populate: [
+            { path: 'user', select: '_id username' },
+            { path: 'likedBy', select: '_id username' },
+          ],
+        })
+
       response.status(200).json({ blogUpdated, userUpdated })
     } catch (error) {
       response.status(500).json(['Error updating post'])
@@ -142,7 +174,21 @@ export const changeLike = async (request, response) => {
 
     try {
       const blogUpdated = await Blog.findByIdAndUpdate(id, postFound, { new: true })
+        .select('createdAt _id title description likes user likedBy')
+        .populate('user', '-_id username')
+        .populate({ path: 'likedBy', select: '-_id username' })
+
       const userUpdated = await User.findByIdAndUpdate(user, userFound, { new: true })
+        .select('-_id username likedBlogs')
+        .populate({
+          path: 'likedBlogs',
+          select: '_id title description createdAt likes user likedBy ',
+          populate: [
+            { path: 'user', select: '-_id username' },
+            { path: 'likedBy', select: '-_id username' },
+          ],
+        })
+
       response.status(200).json({ blogUpdated, userUpdated })
     } catch (error) {
       response.status(500).json(['Error updating post'])
