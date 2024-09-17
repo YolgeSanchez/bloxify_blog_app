@@ -32,55 +32,68 @@ export const getPosts = async (request, response) => {
 export const getFeed = async (request, response) => {
   const { id } = request.user
 
-  const userFound = await User.findById(id)
-  if (!userFound) response.status(404).json(['User not found'])
+  try {
+    const userFound = await User.findById(id)
+    if (!userFound) response.status(404).json(['User not found'])
 
-  const posts = await Blog.find()
-    .where('user')
-    .ne(id)
-    .where('likedBy')
-    .ne(id)
-    .populate([
-      { path: 'user', select: '-_id username' },
-      { path: 'likedBy', select: '-_id username' },
-    ])
-  if (!posts) return response.status(404).json(['No posts found'])
+    try {
+      const posts = await Blog.find()
+        .where('user')
+        .ne(id)
+        .where('likedBy')
+        .ne(id)
+        .populate([
+          { path: 'user', select: '-_id username' },
+          { path: 'likedBy', select: '-_id username' },
+        ])
+      if (!posts) return response.status(404).json(['No posts found'])
 
-  const now = Date.now()
-  const alpha = 0.9
+      const now = Date.now()
+      const alpha = 0.9
 
-  const sortedPost = posts
-    .map((post) => ({
-      post,
-      score:
-        (1 - alpha) * post.likes + alpha * (1 / (1 + (now - new Date(post.createdAt).getTime()))),
-    }))
-    .sort((a, b) => b.score - a.score)
+      const sortedPost = posts
+        .map((post) => ({
+          post,
+          score:
+            (1 - alpha) * post.likes +
+            alpha * (1 / (1 + (now - new Date(post.createdAt).getTime()))),
+        }))
+        .sort((a, b) => b.score - a.score)
 
-  response.json(
-    sortedPost.map(({ post }) => ({
-      _id: post._id,
-      title: post.title,
-      description: post.description,
-      user: post.user,
-      createdAt: post.createdAt,
-      likes: post.likes,
-      likedBy: post.likedBy,
-    }))
-  )
+      response.json(
+        sortedPost.map(({ post }) => ({
+          _id: post._id,
+          title: post.title,
+          description: post.description,
+          user: post.user,
+          createdAt: post.createdAt,
+          likes: post.likes,
+          likedBy: post.likedBy,
+        }))
+      )
+    } catch (error) {
+      return response.status(404).json(['No posts found'])
+    }
+  } catch (error) {
+    return response.status(404).json(['User not found'])
+  }
 }
 
 // get specific post
 export const getPost = async (request, response) => {
   const { id } = request.params
 
-  const post = await Blog.findById(id)
-    .select('createdAt _id title description likes user likedBy')
-    .populate('user', '-_id username')
-    .populate({ path: 'likedBy', select: '-_id username' })
+  try {
+    const post = await Blog.findById(id)
+      .select('createdAt _id title description likes user likedBy')
+      .populate('user', '-_id username')
+      .populate({ path: 'likedBy', select: '-_id username' })
 
-  if (!post) return response.status(404).json(['Not found'])
-  response.json(post)
+    if (!post) return response.status(404).json(['Not found'])
+    response.json(post)
+  } catch (error) {
+    return response.status(404).json(['Not found'])
+  }
 }
 
 // create a post
@@ -116,27 +129,39 @@ export const deletePost = async (request, response) => {
   const { id } = request.params
   const user = request.user.id
 
-  const userFound = await User.findById(user)
-  if (!userFound) return response.status(404).json(['User not found, try'])
+  try {
+    const userFound = await User.findById(user)
+    if (!userFound) return response.status(404).json(['User not found'])
 
-  const post = await Blog.findOneAndDelete({ id, user })
-  if (!post) return response.status(404).json(['Blog not found'])
+    try {
+      const post = await Blog.findOneAndDelete({ _id: id, user })
+      if (!post) return response.status(404).json(['Blog not found'])
 
-  userFound.blogsCount--
-  await User.findByIdAndUpdate(user, userFound, { new: true })
-  return response.sendStatus(204)
+      userFound.blogsCount--
+      await User.findByIdAndUpdate(user, userFound, { new: true })
+      return response.sendStatus(204)
+    } catch (error) {
+      return response.status(500).json(['Error deleting, try again later'])
+    }
+  } catch (error) {
+    return response.status(404).json(['Error deleting, try again later'])
+  }
 }
 
 // edit a post
 export const updatePost = async (request, response) => {
   const { id } = request.params
-  const post = await Blog.findByIdAndUpdate(id, request.body, { new: true })
-    .select('createdAt _id title description likes user likedBy')
-    .populate('user', '-_id username')
-    .populate({ path: 'likedBy', select: '-_id username' })
+  try {
+    const post = await Blog.findByIdAndUpdate(id, request.body, { new: true })
+      .select('createdAt _id title description likes user likedBy')
+      .populate('user', '-_id username')
+      .populate({ path: 'likedBy', select: '-_id username' })
 
-  if (!post) return response.status(404).json({ message: 'Not found' })
-  response.json(post)
+    if (!post) return response.status(404).json({ message: 'Not found' })
+    response.json(post)
+  } catch (error) {
+    return response.status(500).json(['Error updating, try again later'])
+  }
 }
 
 // like or unlike a post
