@@ -15,9 +15,9 @@ export const usePost = () => {
 export const PostProvider = ({ children }) => {
   const [errors, setErrors] = useState(null)
 
-  const getPosts = async () => {
+  const getPosts = async (user) => {
     try {
-      const response = await postsCall()
+      const response = await postsCall(user)
       const data = response.data
       return data
     } catch (error) {
