@@ -41,7 +41,3 @@ function LikedPostsPage() {
 }
 
 export default LikedPostsPage
-
-// TODO: display user posts
-//TODO: logout
-// TODO: change profile from an id to an username

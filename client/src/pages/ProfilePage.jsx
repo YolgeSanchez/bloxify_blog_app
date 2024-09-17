@@ -50,7 +50,3 @@ function ProfilePage() {
 }
 
 export default ProfilePage
-
-// TODO: display user posts
-//TODO: logout
-// TODO: change profile from an id to an username
