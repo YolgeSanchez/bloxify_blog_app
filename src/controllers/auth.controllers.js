@@ -4,29 +4,37 @@ import User from '../models/user.model.js'
 import encrypt from '../libs/SHA256.js'
 import { TOKEN_SECRET } from '../config.js'
 
-//login
+// login
 export const login = async (request, response) => {
   const { email, password } = request.body
 
-  const userFound = await User.findOne({ email })
-  if (!userFound) return response.status(404).json(['User not found'])
+  try {
+    const userFound = await User.findOne({ email })
+    if (!userFound) return response.status(404).json(['User not found'])
 
-  const passwordHash = encrypt(password)
-  if (passwordHash !== userFound.password) return response.status(401).json(['Invalid password'])
+    const passwordHash = encrypt(password)
+    if (passwordHash !== userFound.password) return response.status(401).json(['Invalid password'])
 
-  const token = jwt.sign({ id: userFound._id, username: userFound.username, email }, TOKEN_SECRET, {
-    expiresIn: '7d',
-  })
-  console.log(token)
-  response.cookie('token', token)
-  response.status(201).json({
-    id: userFound._id,
-    email: userFound.email,
-    username: userFound.username,
-  })
+    const token = jwt.sign(
+      { id: userFound._id, username: userFound.username, email },
+      TOKEN_SECRET,
+      {
+        expiresIn: '7d',
+      }
+    )
+    console.log(token)
+    response.cookie('token', token)
+    response.status(201).json({
+      id: userFound._id,
+      email: userFound.email,
+      username: userFound.username,
+    })
+  } catch (error) {
+    return response.status(404).json(['User not found'])
+  }
 }
 
-//register
+// register
 export const register = async (request, response) => {
   const { username, email, password } = request.body
 
@@ -53,36 +61,40 @@ export const register = async (request, response) => {
     })
   } catch (error) {
     console.log(error)
-    response.status(500).json(['Error creating user'])
+    response.status(500).json(['Error creating user, try again later'])
   }
 }
 
-//logout
+// logout
 export const logout = async (request, response) => {
   response.clearCookie('token')
   response.json(['logged out'])
 }
 
-//profile
+// profile
 export const profile = async (request, response) => {
   const { username } = request.params
 
-  const userFound = await User.findOne({ username }).populate({
-    path: 'likedBlogs',
-    select: '_id title description createdAt likes user likedBy ',
-    populate: [
-      { path: 'user', select: '-_id username' },
-      { path: 'likedBy', select: '-_id username' },
-    ],
-  })
-  if (!userFound) return response.status(404).json(['User not found'])
+  try {
+    const userFound = await User.findOne({ username }).populate({
+      path: 'likedBlogs',
+      select: '_id title description createdAt likes user likedBy ',
+      populate: [
+        { path: 'user', select: '-_id username' },
+        { path: 'likedBy', select: '-_id username' },
+      ],
+    })
+    if (!userFound) return response.status(404).json(['User not found'])
 
-  return response.json({
-    email: userFound.email,
-    username: userFound.username,
-    posts: userFound.blogsCount,
-    likes: userFound.likedBlogs,
-  })
+    return response.json({
+      email: userFound.email,
+      username: userFound.username,
+      posts: userFound.blogsCount,
+      likes: userFound.likedBlogs,
+    })
+  } catch (error) {
+    return response.status(404).json(['User not found'])
+  }
 }
 
 // verify token
