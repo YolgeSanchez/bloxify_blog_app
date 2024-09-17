@@ -11,6 +11,6 @@ router.post('/login', validateSchema(loginSchema), login)
 router.post('/register', validateSchema(registerSchema), register)
 router.post('/logout', validToken, logout)
 router.get('/verify', verifyToken)
-router.get('/profile', validToken, profile)
+router.get('/profile:username', validToken, profile)
 
 export default router
