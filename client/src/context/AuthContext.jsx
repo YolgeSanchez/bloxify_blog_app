@@ -41,9 +41,9 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const getProfile = async () => {
+  const getProfile = async (user) => {
     try {
-      const response = await profileCall()
+      const response = await profileCall(user)
       const data = response.data
       return data
     } catch (error) {
