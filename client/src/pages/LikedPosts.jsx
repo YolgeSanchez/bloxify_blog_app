@@ -33,7 +33,7 @@ function LikedPostsPage() {
         {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
-        {likedPosts.length == 0 && <p>No post liked yet</p>}
+        {likedPosts.length == 0 && <p>No posts liked yet</p>}
         {likedPosts.length > 0 && likedPosts.map((post) => <Post post={post} key={post._id} />)}
       </section>
     </div>

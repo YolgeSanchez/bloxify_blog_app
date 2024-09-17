@@ -39,7 +39,7 @@ function ProfilePage() {
         {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
-        {posts.length == 0 && <p>No posts yet </p>}
+        {posts.length == 0 && <p>No blogs posted yet</p>}
         {posts.length > 0 &&
           posts.map((post) => {
             return <Post post={post} key={post._id} />
