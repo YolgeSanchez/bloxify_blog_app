@@ -4,6 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog'
 import { Link } from 'react-router-dom'
 
@@ -14,7 +15,9 @@ function Post({ post }) {
     <article className="post">
       <h2>{title}</h2>
       <p>{description}</p>
-      <p>Posted by: {user.username}</p>
+      <Link to={`/profile/${user.username}`}>
+        <p>Posted by: {user.username}</p>
+      </Link>
       <p>heart</p>
       <Dialog>
         <DialogTrigger>
@@ -29,7 +32,9 @@ function Post({ post }) {
           ) : (
             likedBy.map(({ username }) => (
               <Link to={`/profile/${username}`} key={`${_id}-${username}`}>
-                <div className="user">{username}</div>
+                <DialogClose>
+                  <div className="user">{username}</div>
+                </DialogClose>
               </Link>
             ))
           )}
