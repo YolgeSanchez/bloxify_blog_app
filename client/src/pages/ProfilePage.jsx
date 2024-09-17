@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { usePost } from '@/context/PostContext'
 import Post from '@/components/Post'
@@ -9,11 +9,14 @@ function ProfilePage() {
   const { getPosts } = usePost()
   const [profile, setProfile] = useState({})
   const [posts, setPosts] = useState([])
+  const params = useParams()
 
   useEffect(() => {
     async function fetchProfile() {
-      const response = await getProfile()
-      setProfile(response)
+      if (params.username) {
+        const response = await getProfile(params.username)
+        setProfile(response)
+      }
     }
     async function fetchPosts() {
       const response = await getPosts()
@@ -32,7 +35,7 @@ function ProfilePage() {
           <section>
             <p>Username: {profile.username}</p>
             <p>Email: {profile.email}</p>
-            <Link to="/profile/liked">
+            <Link to={`/profile/${profile.username}/liked`}>
               <p>Likes: {profile.likes.length}</p>
             </Link>
             <p>Posts: {profile.posts}</p>
