@@ -65,10 +65,9 @@ export const logout = async (request, response) => {
 
 //profile
 export const profile = async (request, response) => {
-  console.log(request.cookies)
+  const { username } = request.params
 
-  const { id } = request.user
-  const userFound = await User.findById(id).populate({
+  const userFound = await User.findOne({ username }).populate({
     path: 'likedBlogs',
     select: '_id title description createdAt likes user likedBy ',
     populate: [
@@ -76,10 +75,7 @@ export const profile = async (request, response) => {
       { path: 'likedBy', select: '-_id username' },
     ],
   })
-  console.log(id)
   if (!userFound) return response.status(404).json(['User not found'])
-
-  console.log(userFound.likedBlogs.length, userFound.likedBlogs)
 
   return response.json({
     email: userFound.email,
