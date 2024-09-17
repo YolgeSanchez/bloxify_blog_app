@@ -3,16 +3,29 @@ import User from '../models/user.model.js'
 
 // get self posts
 export const getPosts = async (request, response) => {
-  const { id } = request.user
+  const { username } = request.params
 
-  const posts = await Blog.find({ user: id })
-    .select('createdAt _id title description likes user likedBy')
-    .sort({ createdAt: -1 })
-    .populate({ path: 'user', select: '-_id username' })
-    .populate({ path: 'likedBy', select: '-_id username' })
-  if (!posts) return response.status(404).json(['No blog posted'])
+  try {
+    const userFound = await User.findOne({ username }).select('_id')
+    if (!userFound) return response.status(404).json(['User not found'])
 
-  response.json(posts)
+    const user = userFound._id
+
+    try {
+      const posts = await Blog.find({ user })
+        .select('createdAt _id title description likes user likedBy')
+        .sort({ createdAt: -1 })
+        .populate({ path: 'user', select: '-_id username' })
+        .populate({ path: 'likedBy', select: '-_id username' })
+      if (!posts) return response.status(404).json(['No blogs found'])
+
+      response.json(posts)
+    } catch (error) {
+      return response.status(404).json(['No blogs found'])
+    }
+  } catch (error) {
+    return response.status(404).json(['User not found'])
+  }
 }
 
 // get the user feed
