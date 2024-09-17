@@ -23,8 +23,8 @@ function App() {
               <Route path="/posts" element={<h1>Posts</h1>} />
               <Route path="/addPost" element={<PostFormPage />} />
               <Route path="/posts/:id" element={<PostFormPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/liked" element={<LikedPostsPage />} />
+              <Route path="/profile/:username" element={<ProfilePage />} />
+              <Route path="/profile/:username/liked" element={<LikedPostsPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
