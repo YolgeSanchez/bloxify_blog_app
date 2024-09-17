@@ -17,7 +17,7 @@ const router = Router()
 
 router.get('/posts/:username', validToken, getPosts)
 router.get('/feed', validToken, getFeed)
-router.get('/posts/:id', validToken, getPost)
+router.get('/post/:id', validToken, getPost)
 router.put('/posts/:id/like', validToken, changeLike)
 router.post('/posts', validToken, validateSchema(createBlogSchema), addPost)
 router.delete('/posts/:id', validToken, deletePost)
