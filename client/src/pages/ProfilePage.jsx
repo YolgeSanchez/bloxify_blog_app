@@ -18,12 +18,14 @@ function ProfilePage() {
     async function fetchProfile() {
       if (params.username) {
         const response = await getProfile(params.username)
-        setProfile(response)
+        if (response) setProfile(response)
       }
     }
     async function fetchPosts() {
-      const response = await getPosts()
-      setPosts(response)
+      if (params.username) {
+        const response = await getPosts(params.username)
+        if (response) setPosts(response)
+      }
     }
     fetchProfile()
     fetchPosts()
@@ -37,9 +39,11 @@ function ProfilePage() {
         {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
-        {posts.map((post) => {
-          return <Post post={post} key={post._id} />
-        })}
+        {posts.length == 0 && <p>No posts yet </p>}
+        {posts.length > 0 &&
+          posts.map((post) => {
+            return <Post post={post} key={post._id} />
+          })}
       </section>
     </div>
   )

@@ -16,8 +16,10 @@ function LikedPostsPage() {
     async function fetchProfile() {
       if (params.username) {
         const response = await getProfile(params.username)
-        setProfile(response)
-        setLikes(response.likes)
+        if (response) {
+          setLikes(response.likes)
+          setProfile(response)
+        }
       }
     }
     fetchProfile()
@@ -31,9 +33,8 @@ function LikedPostsPage() {
         {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
-        {likedPosts.map((post) => (
-          <Post post={post} key={post._id} />
-        ))}
+        {likedPosts.length == 0 && <p>No post liked yet</p>}
+        {likedPosts.length > 0 && likedPosts.map((post) => <Post post={post} key={post._id} />)}
       </section>
     </div>
   )
