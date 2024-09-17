@@ -5,6 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Link } from 'react-router-dom'
 
 function Post({ post }) {
   const { _id, title, description, createdAt, user, likedBy, likes } = post
@@ -27,9 +28,9 @@ function Post({ post }) {
             <p className="text-center">This post does not have likes yet</p>
           ) : (
             likedBy.map(({ username }) => (
-              <div className="user" key={`${_id}-${username}`}>
-                {username}
-              </div>
+              <Link to={`/profile/${username}`} key={`${_id}-${username}`}>
+                <div className="user">{username}</div>
+              </Link>
             ))
           )}
         </DialogContent>
