@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+
 import { useAuth } from '@/context/AuthContext'
+
 import Post from '@/components/Post'
+import Profile from '@/components/Profile'
 
 function LikedPostsPage() {
   const { getProfile } = useAuth()
@@ -25,16 +28,7 @@ function LikedPostsPage() {
       <div className="profile">
         <h1>Profile</h1>
         <p>Your profile details will be displayed here.</p>
-        {Object.keys(profile).length > 0 && (
-          <section>
-            <p>Username: {profile.username}</p>
-            <p>Email: {profile.email}</p>
-            <p>Likes: {profile.likes.length}</p>
-            <Link to={`/profile/${profile.username}`}>
-              <p>Posts: {profile.posts}</p>
-            </Link>
-          </section>
-        )}
+        {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
         {likedPosts.map((post) => (

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+
 import { useAuth } from '@/context/AuthContext'
 import { usePost } from '@/context/PostContext'
+
 import Post from '@/components/Post'
+import Profile from '@/components/Profile'
 
 function ProfilePage() {
   const { getProfile } = useAuth()
@@ -31,16 +34,7 @@ function ProfilePage() {
       <div className="profile">
         <h1>Profile</h1>
         <p>Your profile details will be displayed here.</p>
-        {Object.keys(profile).length > 0 && (
-          <section>
-            <p>Username: {profile.username}</p>
-            <p>Email: {profile.email}</p>
-            <Link to={`/profile/${profile.username}/liked`}>
-              <p>Likes: {profile.likes.length}</p>
-            </Link>
-            <p>Posts: {profile.posts}</p>
-          </section>
-        )}
+        {Object.keys(profile).length > 0 && <Profile profile={profile} />}
       </div>
       <section className="posts">
         {posts.map((post) => {
