@@ -31,8 +31,8 @@ export default [
       'react-hooks/exhaustive-deps': 0,
       'react/no-unescaped-entities': 0,
       'react/prop-types': 0,
+      'react-refresh/only-export-components': 0,
       'react/jsx-no-target-blank': 'off',
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
 ]
