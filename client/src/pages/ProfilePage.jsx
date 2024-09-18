@@ -30,7 +30,7 @@ function ProfilePage() {
     }
     fetchProfile()
     fetchPosts()
-  }, [])
+  }, [params.username])
 
   return (
     <div className="profile-page">
