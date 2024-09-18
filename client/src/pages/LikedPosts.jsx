@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-
 import { useAuth } from '@/context/AuthContext'
-
 import Post from '@/components/Post'
 import Profile from '@/components/Profile'
+import NavBar from '@/components/NavBar'
 
 function LikedPostsPage() {
   const { getProfile } = useAuth()
@@ -27,6 +26,7 @@ function LikedPostsPage() {
 
   return (
     <div className="profile-page">
+      <NavBar />
       <div className="profile">
         <h1>Profile</h1>
         <p>Your profile details will be displayed here.</p>

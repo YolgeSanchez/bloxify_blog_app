@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { usePost } from '@/context/PostContext'
 import Post from '@/components/Post'
+import NavBar from '@/components/NavBar'
 
 function HomePage() {
   const { getFeed } = usePost()
@@ -16,6 +17,7 @@ function HomePage() {
 
   return (
     <div className="home-page">
+      <NavBar />
       <h1>Home Page</h1>
       <p>Welcome to the Blog App!</p>
       <section className="posts">

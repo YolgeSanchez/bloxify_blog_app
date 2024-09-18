@@ -6,6 +6,7 @@ import { usePost } from '@/context/PostContext'
 
 import Post from '@/components/Post'
 import Profile from '@/components/Profile'
+import NavBar from '@/components/NavBar'
 
 function ProfilePage() {
   const { getProfile } = useAuth()
@@ -33,6 +34,7 @@ function ProfilePage() {
 
   return (
     <div className="profile-page">
+      <NavBar />
       <div className="profile">
         <h1>Profile</h1>
         <p>Your profile details will be displayed here.</p>

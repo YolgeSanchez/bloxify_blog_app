@@ -1,3 +1,4 @@
+import NavBar from '@/components/NavBar'
 import { useForm } from 'react-hook-form'
 
 function PostFormPage() {
@@ -10,6 +11,7 @@ function PostFormPage() {
 
   return (
     <div>
+      <NavBar />
       <form onSubmit={onSubmit}>
         <label htmlFor="title">Title</label>
         <input type="text" {...register('title')} autoComplete="off" autoFocus />
