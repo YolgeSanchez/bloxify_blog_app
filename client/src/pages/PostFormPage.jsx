@@ -1,12 +1,27 @@
 import NavBar from '@/components/NavBar'
 import { useForm } from 'react-hook-form'
+import { usePost } from '@/context/PostContext'
+import { useAuth } from '@/context/AuthContext'
+import { useParams, useNavigate } from 'react-router-dom'
 
 function PostFormPage() {
-  const { register, handleSubmit } = useForm()
+  const { addPost, updatePost } = usePost()
+  const { user } = useAuth()
+  const { register, handleSubmit, setValue } = useForm()
+  const params = useParams()
+  const navigate = useNavigate()
 
-  const onSubmit = handleSubmit((data) => {
-    // Send data to the server
-    console.log(data)
+  const onSubmit = handleSubmit(async (data) => {
+    if (params.id) {
+    } else {
+      try {
+        const response = await addPost(data)
+        console.log(response)
+        navigate(`/profile/${user.username}`)
+      } catch (error) {
+        console.error('error creating the new post', error)
+      }
+    }
   })
 
   return (
