@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -7,9 +8,15 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import { Link } from 'react-router-dom'
+import { LikeButton } from '@/components/LikeButton'
 
-function Post({ post }) {
+function Post({ post: initialPost }) {
+  const [post, setPost] = useState(initialPost)
   const { _id, title, description, createdAt, user, likedBy, likes } = post
+
+  const updatePost = (post) => {
+    setPost(post)
+  }
 
   return (
     <article className="post">
@@ -41,6 +48,7 @@ function Post({ post }) {
         </DialogContent>
       </Dialog>
       <p>Created at: {new Date(createdAt).toLocaleDateString()}</p>
+      <LikeButton post={post} onLike={updatePost} />
     </article>
   )
 }
