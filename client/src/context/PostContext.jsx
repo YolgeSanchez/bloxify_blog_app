@@ -72,7 +72,7 @@ export const PostProvider = ({ children }) => {
   // update an existing post
   const updatePost = async (id, post) => {
     try {
-      const response = await updatePostCall(post)
+      const response = await updatePostCall(id, post)
       const data = response.data
       return data
     } catch (error) {
