@@ -21,6 +21,7 @@ export const usePost = () => {
 export const PostProvider = ({ children }) => {
   const [errors, setErrors] = useState(null)
 
+  // get all posts of a user
   const getPosts = async (user) => {
     try {
       const response = await postsCall(user)
@@ -32,6 +33,7 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  // get a specific post by its id
   const getPost = async (id) => {
     try {
       const response = await postCall(id)
@@ -43,6 +45,7 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  // get the feed of the current user logged in
   const getFeed = async () => {
     try {
       const response = await feedCall()
@@ -54,6 +57,7 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  // add a new post
   const addPost = async (post) => {
     try {
       const response = await addPostCall(post)
@@ -65,7 +69,8 @@ export const PostProvider = ({ children }) => {
     }
   }
 
-  const updatePost = async (post) => {
+  // update an existing post
+  const updatePost = async (id, post) => {
     try {
       const response = await updatePostCall(post)
       const data = response.data
@@ -76,6 +81,7 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  // change the like state of a user with a post
   const changeLike = async (id) => {
     try {
       const response = await likeCall(id)
