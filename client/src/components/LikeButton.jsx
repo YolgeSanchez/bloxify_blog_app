@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useAuth } from '@/context/AuthContext'
 import { usePost } from '@/context/PostContext'
 
-export function LikeButton({ post, onLike }) {
+export default function LikeButton({ post, onLike }) {
   const { user } = useAuth()
   const { changeLike, getPost } = usePost()
   const [liked, setLiked] = useState(null)
@@ -41,5 +41,3 @@ export function LikeButton({ post, onLike }) {
     </div>
   )
 }
-
-// export function DisplayLikes({ post }) {}
