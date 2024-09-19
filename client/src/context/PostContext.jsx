@@ -1,9 +1,8 @@
 import { createContext, useContext, useState } from 'react'
-import { feedCall, postsCall } from '../api/posts.js'
+import { feedCall, likeCall, postCall, postsCall } from '../api/posts.js'
 
 export const PostContext = createContext()
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const usePost = () => {
   const context = useContext(PostContext)
   if (!context) {
@@ -26,6 +25,17 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  const getPost = async (id) => {
+    try {
+      const response = await postCall(id)
+      const data = response.data
+      return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
   const getFeed = async () => {
     try {
       const response = await feedCall()
@@ -37,10 +47,23 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  const changeLike = async (id) => {
+    try {
+      const response = await likeCall(id)
+      const data = response.data
+      return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
   const value = {
     errors,
     getPosts,
+    getPost,
     getFeed,
+    changeLike,
   }
 
   return <PostContext.Provider value={value}>{children}</PostContext.Provider>
