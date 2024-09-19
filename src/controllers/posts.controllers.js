@@ -201,7 +201,7 @@ export const changeLike = async (request, response) => {
           ],
         })
 
-      response.status(200).json({ blogUpdated, userUpdated })
+      response.status(200).json(false)
     } catch (error) {
       response.status(500).json(['Error updating post'])
     }
@@ -227,7 +227,7 @@ export const changeLike = async (request, response) => {
           ],
         })
 
-      response.status(200).json({ blogUpdated, userUpdated })
+      response.status(200).json(true)
     } catch (error) {
       response.status(500).json(['Error updating post'])
     }
