@@ -5,10 +5,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Link } from 'react-router-dom'
-import { LikeButton } from '@/components/LikeButton'
+import LikeButton from '@/components/LikeButton'
+import DisplayLikes from '@/components/DisplayLikes'
 
 function Post({ post: initialPost }) {
   const [post, setPost] = useState(initialPost)
@@ -37,13 +37,7 @@ function Post({ post: initialPost }) {
           {likedBy.length == 0 ? (
             <p className="text-center">This post does not have likes yet</p>
           ) : (
-            likedBy.map(({ username }) => (
-              <Link to={`/profile/${username}`} key={`${_id}-${username}`}>
-                <DialogClose>
-                  <div className="user">{username}</div>
-                </DialogClose>
-              </Link>
-            ))
+            <DisplayLikes _id={_id} likes={likedBy} />
           )}
         </DialogContent>
       </Dialog>
