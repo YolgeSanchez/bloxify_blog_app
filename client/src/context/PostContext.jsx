@@ -1,5 +1,12 @@
 import { createContext, useContext, useState } from 'react'
-import { feedCall, likeCall, postCall, postsCall } from '../api/posts.js'
+import {
+  addPostCall,
+  feedCall,
+  likeCall,
+  postCall,
+  postsCall,
+  updatePostCall,
+} from '../api/posts.js'
 
 export const PostContext = createContext()
 
@@ -47,6 +54,28 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  const addPost = async (post) => {
+    try {
+      const response = await addPostCall(post)
+      const data = response.data
+      return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
+  const updatePost = async (post) => {
+    try {
+      const response = await updatePostCall(post)
+      const data = response.data
+      return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
   const changeLike = async (id) => {
     try {
       const response = await likeCall(id)
@@ -62,6 +91,8 @@ export const PostProvider = ({ children }) => {
     errors,
     getPosts,
     getPost,
+    addPost,
+    updatePost,
     getFeed,
     changeLike,
   }
