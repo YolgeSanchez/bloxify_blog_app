@@ -109,16 +109,8 @@ export const addPost = async (request, response) => {
 
   try {
     await User.findByIdAndUpdate(user, userFound, { new: true })
-    const savedPost = await post.save()
-    response.json({
-      id: savedPost._id,
-      title: savedPost.title,
-      description: savedPost.description,
-      user: { username: userFound.username },
-      createdAt: savedPost.createdAt,
-      likes: 0,
-      likedBy: [],
-    })
+    await post.save()
+    response.json(true)
   } catch (error) {
     response.status(500).json(['Error creating post'])
   }
@@ -158,7 +150,7 @@ export const updatePost = async (request, response) => {
       .populate({ path: 'likedBy', select: '-_id username' })
 
     if (!post) return response.status(404).json({ message: 'Not found' })
-    response.json(post)
+    response.json(true)
   } catch (error) {
     return response.status(500).json(['Error updating, try again later'])
   }
@@ -185,21 +177,8 @@ export const changeLike = async (request, response) => {
     userLikes.splice(userLikes.indexOf(id), 1)
 
     try {
-      const blogUpdated = await Blog.findByIdAndUpdate(id, postFound, { new: true })
-        .select('createdAt _id title description likes user likedBy')
-        .populate('user', '-_id username')
-        .populate({ path: 'likedBy', select: '-_id username' })
-
-      const userUpdated = await User.findByIdAndUpdate(user, userFound, { new: true })
-        .select('-_id username likedBlogs')
-        .populate({
-          path: 'likedBlogs',
-          select: '_id title description createdAt likes user likedBy ',
-          populate: [
-            { path: 'user', select: '_id username' },
-            { path: 'likedBy', select: '_id username' },
-          ],
-        })
+      await Blog.findByIdAndUpdate(id, postFound, { new: true })
+      await User.findByIdAndUpdate(user, userFound, { new: true })
 
       response.status(200).json(false)
     } catch (error) {
@@ -211,21 +190,8 @@ export const changeLike = async (request, response) => {
     userLikes.push(id)
 
     try {
-      const blogUpdated = await Blog.findByIdAndUpdate(id, postFound, { new: true })
-        .select('createdAt _id title description likes user likedBy')
-        .populate('user', '-_id username')
-        .populate({ path: 'likedBy', select: '-_id username' })
-
-      const userUpdated = await User.findByIdAndUpdate(user, userFound, { new: true })
-        .select('-_id username likedBlogs')
-        .populate({
-          path: 'likedBlogs',
-          select: '_id title description createdAt likes user likedBy ',
-          populate: [
-            { path: 'user', select: '-_id username' },
-            { path: 'likedBy', select: '-_id username' },
-          ],
-        })
+      await Blog.findByIdAndUpdate(id, postFound, { new: true })
+      await User.findByIdAndUpdate(user, userFound, { new: true })
 
       response.status(200).json(true)
     } catch (error) {
