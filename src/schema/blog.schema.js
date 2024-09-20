@@ -11,6 +11,6 @@ export const createBlogSchema = z.object({
     .string({
       required_error: 'Description is required',
     })
-    .min(20, { message: 'Description is required' })
+    .min(20, { message: 'Description minimum length is 20' })
     .max(200),
 })
