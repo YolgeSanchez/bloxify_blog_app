@@ -6,9 +6,14 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 function PostFormPage() {
-  const { getPost, addPost, updatePost } = usePost()
+  const { getPost, addPost, updatePost, errors: postErrors } = usePost()
   const { user } = useAuth()
-  const { register, handleSubmit, setValue } = useForm()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm()
   const params = useParams()
   const navigate = useNavigate()
 
@@ -16,8 +21,10 @@ function PostFormPage() {
     const fillInputs = async () => {
       if (params.id) {
         const post = await getPost(params.id)
-        setValue('title', post.title)
-        setValue('description', post.description)
+        if (post) {
+          setValue('title', post.title)
+          setValue('description', post.description)
+        }
       }
     }
     fillInputs()
@@ -25,16 +32,13 @@ function PostFormPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
-      // TODO
       const id = params.id
       const response = await updatePost(id, data)
-      console.log(response)
-      navigate(`/profile/${user.username}`)
+      if (response) navigate(`/profile/${user.username}`)
     } else {
       try {
         const response = await addPost(data)
-        console.log(response)
-        navigate(`/profile/${user.username}`)
+        if (response) navigate(`/profile/${user.username}`)
       } catch (error) {
         console.error('error creating the new post', error)
       }
@@ -44,11 +48,23 @@ function PostFormPage() {
   return (
     <div>
       <NavBar />
+      {postErrors.map((error, i) => (
+        <div className="error" key={i}>
+          {error}
+        </div>
+      ))}
       <form onSubmit={onSubmit}>
         <label htmlFor="title">Title</label>
-        <input type="text" {...register('title')} autoComplete="off" autoFocus />
+        <input
+          type="text"
+          {...register('title', { required: true })}
+          autoComplete="off"
+          autoFocus
+        />
+        {errors.title && <p>Title is required</p>}
         <label htmlFor="description">Content</label>
-        <textarea placeholder="Content" {...register('description')} autoComplete="off" />
+        <textarea {...register('description', { required: true })} autoComplete="off" />
+        {errors.description && <p>Description is required</p>}
         <button type="submit">Submit</button>
       </form>
     </div>
