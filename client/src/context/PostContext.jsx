@@ -19,7 +19,7 @@ export const usePost = () => {
 }
 
 export const PostProvider = ({ children }) => {
-  const [errors, setErrors] = useState(null)
+  const [errors, setErrors] = useState([])
 
   // get all posts of a user
   const getPosts = async (user) => {
