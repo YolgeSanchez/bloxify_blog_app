@@ -10,7 +10,7 @@ import NavBar from '@/components/NavBar'
 
 function ProfilePage() {
   const { getProfile } = useAuth()
-  const { getPosts } = usePost()
+  const { getPosts, deletePost } = usePost()
   const [profile, setProfile] = useState({})
   const [posts, setPosts] = useState([])
   const params = useParams()
@@ -30,7 +30,18 @@ function ProfilePage() {
     }
     fetchProfile()
     fetchPosts()
-  }, [params.username])
+  }, [params.username, posts])
+
+  const handleDelete = async (id) => {
+    try {
+      await deletePost(id)
+      setPosts(posts.filter((post) => post._id !== id))
+    } catch (error) {
+      console.error('error deleting the post', error)
+      // TODO: Show a notification or redirect to an error page instead of console.error
+      // window.alert('Failed to delete the post')
+    }
+  }
 
   return (
     <div className="profile-page">
@@ -44,7 +55,7 @@ function ProfilePage() {
         {posts.length == 0 && <p>No blogs posted yet</p>}
         {posts.length > 0 &&
           posts.map((post) => {
-            return <Post post={post} key={post._id} />
+            return <Post key={post._id} post={post} onProfile={true} deletePost={handleDelete} />
           })}
       </section>
     </div>

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -6,13 +5,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '@/context/AuthContext'
 import LikeButton from '@/components/LikeButton'
 import DisplayLikes from '@/components/DisplayLikes'
+import PostOptions from '@/components/PostOptions'
 
-function Post({ post: initialPost }) {
+function Post({ post: initialPost, deletePost, onProfile = false }) {
+  const { user: currentUser } = useAuth()
   const [post, setPost] = useState(initialPost)
   const { _id, title, description, createdAt, user, likedBy, likes } = post
+  const owner = currentUser.username == user.username
 
   const updatePost = (post) => {
     setPost(post)
@@ -20,6 +25,7 @@ function Post({ post: initialPost }) {
 
   return (
     <article className="post">
+      {onProfile && owner && <PostOptions post={post} deletePost={deletePost} />}
       <h2>{title}</h2>
       <p>{description}</p>
       <Link to={`/profile/${user.username}`}>
