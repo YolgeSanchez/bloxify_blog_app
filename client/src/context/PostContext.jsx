@@ -5,6 +5,7 @@ import {
   likeCall,
   postCall,
   postsCall,
+  removePostCall,
   updatePostCall,
 } from '../api/posts.js'
 
@@ -93,12 +94,22 @@ export const PostProvider = ({ children }) => {
     }
   }
 
+  const deletePost = async (id) => {
+    try {
+      await removePostCall(id)
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
   const value = {
     errors,
     getPosts,
     getPost,
     addPost,
     updatePost,
+    deletePost,
     getFeed,
     changeLike,
   }
