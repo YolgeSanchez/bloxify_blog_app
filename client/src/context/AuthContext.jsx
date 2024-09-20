@@ -1,10 +1,9 @@
 import { createContext, useState, useContext, useEffect } from 'react'
-import { registerCall, loginCall, profileCall, verifyToken } from '../api/auth.js'
+import { registerCall, loginCall, profileCall, verifyToken, logoutCall } from '../api/auth.js'
 import Cookies from 'js-cookie'
 
 export const AuthContext = createContext()
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
@@ -46,6 +45,18 @@ export const AuthProvider = ({ children }) => {
       const response = await profileCall(user)
       const data = response.data
       return data
+    } catch (error) {
+      console.log(error.response.data)
+      setErrors(error.response.data)
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await logoutCall()
+      Cookies.remove('token')
+      setUser(null)
+      setIsAuthenticated(false)
     } catch (error) {
       console.log(error.response.data)
       setErrors(error.response.data)
@@ -96,7 +107,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ registerUser, loginUser, getProfile, user, isAuthenticated, errors, loading }}
+      value={{
+        registerUser,
+        loginUser,
+        getProfile,
+        logout,
+        user,
+        isAuthenticated,
+        errors,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>
