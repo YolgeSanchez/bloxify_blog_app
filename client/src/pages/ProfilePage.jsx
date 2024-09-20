@@ -30,7 +30,7 @@ function ProfilePage() {
     }
     fetchProfile()
     fetchPosts()
-  }, [params.username, posts])
+  }, [params.username])
 
   const handleDelete = async (id) => {
     try {
