@@ -67,11 +67,11 @@ function LoginPage() {
               />
               {errors.password && <p className="text-red-500">Password is required</p>}
             </div>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full">
               Login
             </Button>
-          </CardContent>
-          <CardFooter>
             <div className="text-sm text-center">
               Don't have an account?{' '}
               <Link to="/register" className="text-blue-500 hover:underline">
