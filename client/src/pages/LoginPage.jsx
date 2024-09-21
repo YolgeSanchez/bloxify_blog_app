@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { toast } from 'sonner'
-import { Toaster } from 'sonner'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   Card,
   CardContent,
@@ -44,9 +43,11 @@ function LoginPage() {
         <form onSubmit={onSubmit}>
           <CardContent className="space-y-4">
             {loginErrors &&
-              loginErrors.forEach((error) => {
-                return toast.error(error)
-              })}
+              loginErrors.map((error, index) => (
+                <Alert variant="destructive" className="mb-4" key={index}>
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              ))}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -80,7 +81,6 @@ function LoginPage() {
           </CardFooter>
         </form>
       </Card>
-      <Toaster richColors />
     </div>
   )
 }
