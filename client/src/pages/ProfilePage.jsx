@@ -44,21 +44,23 @@ function ProfilePage() {
   }
 
   return (
-    <div className="profile-page">
+    <>
       <NavBar />
-      <div className="profile">
-        <h1>Profile</h1>
-        <p>Your profile details will be displayed here.</p>
-        {Object.keys(profile).length > 0 && <Profile profile={profile} />}
+      <div className="pb-16 md:absolute md:left-48 md:top-0 md:w-[100% - 12rem] md:h-full">
+        <div className="profile">
+          <h1>Profile</h1>
+          <p>Your profile details will be displayed here.</p>
+          {Object.keys(profile).length > 0 && <Profile profile={profile} />}
+        </div>
+        <section className="posts">
+          {posts.length == 0 && <p>No blogs posted yet</p>}
+          {posts.length > 0 &&
+            posts.map((post) => {
+              return <Post key={post._id} post={post} onProfile={true} deletePost={handleDelete} />
+            })}
+        </section>
       </div>
-      <section className="posts">
-        {posts.length == 0 && <p>No blogs posted yet</p>}
-        {posts.length > 0 &&
-          posts.map((post) => {
-            return <Post key={post._id} post={post} onProfile={true} deletePost={handleDelete} />
-          })}
-      </section>
-    </div>
+    </>
   )
 }
 

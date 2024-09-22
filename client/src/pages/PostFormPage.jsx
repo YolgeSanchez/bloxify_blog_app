@@ -46,28 +46,30 @@ function PostFormPage() {
   })
 
   return (
-    <div>
+    <>
       <NavBar />
-      {postErrors.map((error, i) => (
-        <div className="error" key={i}>
-          {error}
-        </div>
-      ))}
-      <form onSubmit={onSubmit}>
-        <label htmlFor="title">Title</label>
-        <input
-          type="text"
-          {...register('title', { required: true })}
-          autoComplete="off"
-          autoFocus
-        />
-        {errors.title && <p>Title is required</p>}
-        <label htmlFor="description">Content</label>
-        <textarea {...register('description', { required: true })} autoComplete="off" />
-        {errors.description && <p>Description is required</p>}
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+      <div className="pb-16 md:absolute md:left-48 md:top-0 md:w-[100% - 12rem] md:h-full">
+        {postErrors.map((error, i) => (
+          <div className="error" key={i}>
+            {error}
+          </div>
+        ))}
+        <form onSubmit={onSubmit}>
+          <label htmlFor="title">Title</label>
+          <input
+            type="text"
+            {...register('title', { required: true })}
+            autoComplete="off"
+            autoFocus
+          />
+          {errors.title && <p>Title is required</p>}
+          <label htmlFor="description">Content</label>
+          <textarea {...register('description', { required: true })} autoComplete="off" />
+          {errors.description && <p>Description is required</p>}
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </>
   )
 }
 
