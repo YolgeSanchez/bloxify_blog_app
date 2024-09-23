@@ -35,7 +35,7 @@ function LoginPage() {
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
-      <Card className="w-full max-w-sm mx-auto ">
+      <Card className="w-[90%] max-w-sm mx-auto ">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>Enter your email and password to login</CardDescription>
