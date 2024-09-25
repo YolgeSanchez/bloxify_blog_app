@@ -1,3 +1,10 @@
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useAuth } from '@/context/AuthContext'
+import LikeButton from '@/components/LikeButton'
+import DisplayLikes from '@/components/DisplayLikes'
+import PostOptions from '@/components/PostOptions'
 import {
   Dialog,
   DialogContent,
@@ -6,50 +13,61 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '@/context/AuthContext'
-import LikeButton from '@/components/LikeButton'
-import DisplayLikes from '@/components/DisplayLikes'
-import PostOptions from '@/components/PostOptions'
-
-function Post({ post: initialPost, deletePost, onProfile = false }) {
+export function Post({ post: initialPost, deletePost, onProfile = false }) {
   const { user: currentUser } = useAuth()
   const [post, setPost] = useState(initialPost)
-  const { _id, title, description, createdAt, user, likedBy, likes } = post
+  const {
+    _id: postId,
+    title,
+    description,
+    createdAt: postDate,
+    user,
+    likedBy,
+    likes: likesCount,
+  } = post
   const owner = currentUser.username == user.username
+  const author = user.username
 
   const updatePost = (post) => {
     setPost(post)
   }
 
   return (
-    <article className="post">
-      {onProfile && owner && <PostOptions post={post} deletePost={deletePost} />}
-      <h2>{title}</h2>
-      <p>{description}</p>
-      <Link to={`/profile/${user.username}`}>
-        <p>Posted by: {user.username}</p>
-      </Link>
-      <p>heart</p>
-      <Dialog>
-        <DialogTrigger>
-          <p>{likes} likes</p>
-        </DialogTrigger>
-        <DialogContent aria-describedby={undefined}>
-          <DialogHeader>
-            <DialogTitle className="text-center">Likes</DialogTitle>
-          </DialogHeader>
-          {likedBy.length == 0 ? (
-            <p className="text-center">This post does not have likes yet</p>
-          ) : (
-            <DisplayLikes _id={_id} likes={likedBy} />
-          )}
-        </DialogContent>
-      </Dialog>
-      <p>Created at: {new Date(createdAt).toLocaleDateString()}</p>
-      <LikeButton post={post} onLike={updatePost} />
-    </article>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div className="space-y-1">
+          <h2 className="text-2xl font-bold">{title}</h2>
+          <p className="text-sm text-muted-foreground">
+            Posted by <Link to={`/profile/${author}`}>{author}</Link> on{' '}
+            {new Date(postDate).toLocaleDateString()}
+          </p>
+        </div>
+
+        {onProfile && owner && <PostOptions post={post} deletePost={deletePost} />}
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">{description}</p>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center">
+        <Dialog>
+          <DialogTrigger>
+            <p className="text-sm text-primary hover:underline">{likesCount} likes</p>
+          </DialogTrigger>
+          <DialogContent aria-describedby={undefined}>
+            <DialogHeader>
+              <DialogTitle className="text-center">Likes</DialogTitle>
+            </DialogHeader>
+            {likedBy.length == 0 ? (
+              <p className="text-center">This post does not have likes yet</p>
+            ) : (
+              <DisplayLikes _id={postId} likes={likedBy} />
+            )}
+          </DialogContent>
+        </Dialog>
+
+        <LikeButton post={post} onLike={updatePost} />
+      </CardFooter>
+    </Card>
   )
 }
 
