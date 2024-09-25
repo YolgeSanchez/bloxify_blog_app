@@ -18,7 +18,7 @@ function HomePage() {
   return (
     <>
       <NavBar />
-      <div className="pb-16 md:absolute md:left-48 md:top-0 md:w-[100% - 12rem] md:h-full">
+      <div className="pb-16 md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:h-full">
         <h1>Home Page</h1>
         <p>Welcome to the Blog App!</p>
         <section className="posts">
