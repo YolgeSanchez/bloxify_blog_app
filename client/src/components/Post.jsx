@@ -33,19 +33,22 @@ export function Post({ post: initialPost, deletePost, onProfile = false }) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-xl mx-auto md:p-4 mb-5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold">{title}</h2>
           <p className="text-sm text-muted-foreground">
-            Posted by <Link to={`/profile/${author}`}>{author}</Link> on{' '}
-            {new Date(postDate).toLocaleDateString()}
+            Posted by{' '}
+            <Link className="font-bold" to={`/profile/${author}`}>
+              {author}
+            </Link>{' '}
+            on {new Date(postDate).toLocaleDateString()}
           </p>
         </div>
 
         {onProfile && owner && <PostOptions post={post} deletePost={deletePost} />}
       </CardHeader>
-      <CardContent>
+      <CardContent className="mt-3">
         <p className="text-muted-foreground">{description}</p>
       </CardContent>
       <CardFooter className="flex justify-between items-center">

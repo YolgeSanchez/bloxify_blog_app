@@ -9,7 +9,7 @@ export function NavBar() {
 
   const aside = {
     default:
-      'fixed left-0 bottom-0 w-screen h-12 border-t bg-background transition-all duration-100 ease-in-out flex justify-evenly items-center',
+      'fixed left-0 bottom-0 w-screen h-12 border-t bg-background transition-all duration-100 ease-in-out flex justify-evenly items-center z-10',
     md: 'md:w-48 md:left-0 md:top-0 md:h-full md:border-r md:flex-col md:justify-between md:p-3 md:items-start',
   }
   return (
