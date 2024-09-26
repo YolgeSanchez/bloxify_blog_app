@@ -33,10 +33,14 @@ export default function LikeButton({ post, onLike }) {
         variant="ghost"
         size="icon"
         onClick={() => handleLike(post._id)}
-        className={`transition-transform ${liked ? 'scale-110' : 'scale-100'}`}
+        className={`transition-transform duration-75 ${liked ? 'scale-110' : 'scale-100'}`}
         aria-label={liked ? 'Unlike' : 'Like'}
       >
-        <Heart className={`h-6 w-6 ${liked ? 'fill-red-500 text-red-500' : 'text-foreground'}`} />
+        <Heart
+          className={`transition-color duration-500 h-6 w-6 ${
+            liked ? 'fill-red-500 text-red-500' : 'text-foreground'
+          }`}
+        />
       </Button>
     </div>
   )
