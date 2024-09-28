@@ -1,5 +1,8 @@
 import Blog from '../models/blog.model.js'
 import User from '../models/user.model.js'
+import fs from 'fs'
+import path from 'path'
+import { __dirname } from '../../index.js'
 
 // get self posts
 export const getPosts = async (request, response) => {
@@ -98,6 +101,9 @@ export const getPost = async (request, response) => {
 
 // create a post
 export const addPost = async (request, response) => {
+  // verify a file was uploaded
+  if (!request.file) return response.status(400).json(['File is required'])
+
   const { title, description } = request.body
   const user = request.user.id
 
@@ -109,7 +115,18 @@ export const addPost = async (request, response) => {
 
   try {
     await User.findByIdAndUpdate(user, userFound, { new: true })
-    await post.save()
+    const savedPost = await post.save()
+
+    console.log(request.file.path)
+
+    const oldFilePath = request.file.path
+    const fileExtension = path.extname(request.file.originalname)
+    const newFileName = `post-${savedPost._id}-${userFound.username}${fileExtension}`
+    const newFilePath = path.join(__dirname, 'uploads', userFound.username, newFileName)
+
+    fs.renameSync(oldFilePath, newFilePath)
+    console.log(newFilePath)
+
     response.json(true)
   } catch (error) {
     response.status(500).json(['Error creating post'])
