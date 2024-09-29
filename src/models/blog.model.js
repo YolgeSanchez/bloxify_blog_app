@@ -25,6 +25,10 @@ const blogSchema = new mongoose.Schema(
       ref: 'User',
       default: [],
     },
+    ImageUrl: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
