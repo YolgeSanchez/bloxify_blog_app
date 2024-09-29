@@ -25,7 +25,7 @@ const blogSchema = new mongoose.Schema(
       ref: 'User',
       default: [],
     },
-    ImageUrl: {
+    imageUrl: {
       type: String,
       default: null,
     },
