@@ -130,7 +130,9 @@ export const addPost = async (request, response) => {
 
     //TODO: fetch the upload image to ftp server api
     try {
-      await uploadToFTP(userFound.username, newFileName)
+      const url = await uploadToFTP(userFound.username, newFileName)
+      savedPost.ImageUrl = url
+      savedPost.save()
     } catch (error) {
       console.error('error uploading image to ftp server', error)
     }
