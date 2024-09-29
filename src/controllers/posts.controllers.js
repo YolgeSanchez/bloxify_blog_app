@@ -3,6 +3,7 @@ import User from '../models/user.model.js'
 import fs from 'fs'
 import path from 'path'
 import { __dirname } from '../../index.js'
+import uploadToFTP from '../libs/uploadToFTP.js'
 
 // get self posts
 export const getPosts = async (request, response) => {
@@ -119,13 +120,20 @@ export const addPost = async (request, response) => {
 
     console.log(request.file.path)
 
-    const oldFilePath = request.file.path
+    const oldLocalPath = request.file.path
     const fileExtension = path.extname(request.file.originalname)
     const newFileName = `post-${savedPost._id}-${userFound.username}${fileExtension}`
-    const newFilePath = path.join(__dirname, 'uploads', userFound.username, newFileName)
+    const newFilePath = path.join(userFound.username, newFileName)
+    const newLocalPath = path.join(__dirname, 'uploads', newFilePath)
 
-    fs.renameSync(oldFilePath, newFilePath)
-    console.log(newFilePath)
+    fs.renameSync(oldLocalPath, newLocalPath)
+
+    //TODO: fetch the upload image to ftp server api
+    try {
+      await uploadToFTP(userFound.username, newFileName)
+    } catch (error) {
+      console.error('error uploading image to ftp server', error)
+    }
 
     response.json(true)
   } catch (error) {
