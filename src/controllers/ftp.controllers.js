@@ -19,6 +19,3 @@ export const getFtpImage = async (request, response) => {
   // send the image
   response.sendFile(localPath)
 }
-
-// TODO:
-export const uploadImageFtp = (request, response) => {}
