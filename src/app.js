@@ -7,6 +7,7 @@ configDotenv()
 
 import authRoutes from './routes/auth.routes.js'
 import postsRoutes from './routes/posts.routes.js'
+import ftpRoutes from './routes/ftp.routes.js'
 
 const app = e()
 
@@ -24,5 +25,6 @@ app.use(cookieParser())
 //routes
 app.use('/api', authRoutes)
 app.use('/api', postsRoutes)
+app.use('/api', ftpRoutes)
 
 export default app
