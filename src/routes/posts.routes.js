@@ -51,7 +51,13 @@ router.get('/post/:id', validToken, getPost)
 router.put('/posts/:id/like', validToken, changeLike)
 router.post('/posts', validToken, upload.single('image'), validateSchema(createBlogSchema), addPost)
 router.delete('/posts/:id', validToken, deletePost)
-router.put('/posts/:id', validToken, validateSchema(createBlogSchema), updatePost)
+router.put(
+  '/posts/:id',
+  validToken,
+  upload.single('image'),
+  validateSchema(createBlogSchema),
+  updatePost
+)
 
 export default router
 

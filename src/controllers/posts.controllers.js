@@ -118,8 +118,6 @@ export const addPost = async (request, response) => {
     await User.findByIdAndUpdate(user, userFound, { new: true })
     const savedPost = await post.save()
 
-    console.log(request.file.path)
-
     const oldLocalPath = request.file.path
     const fileExtension = path.extname(request.file.originalname)
     const newFileName = `post-${savedPost._id}-${userFound.username}${fileExtension}`
@@ -135,6 +133,7 @@ export const addPost = async (request, response) => {
       savedPost.save()
     } catch (error) {
       console.error('error uploading image to ftp server', error)
+      return response.status(500).json(['Error uploading image to FTP server'])
     }
 
     response.json(true)
@@ -169,14 +168,37 @@ export const deletePost = async (request, response) => {
 
 // edit a post
 export const updatePost = async (request, response) => {
-  const { id } = request.params
-  try {
-    const post = await Blog.findByIdAndUpdate(id, request.body, { new: true })
-      .select('createdAt _id title description likes user likedBy')
-      .populate('user', '-_id username')
-      .populate({ path: 'likedBy', select: '-_id username' })
+  // verify a file was uploaded
+  if (!request.file) return response.status(400).json(['File is required'])
 
+  const { id } = request.params
+  const user = request.user.id
+
+  const userFound = await User.findById(user)
+  if (!userFound) return response.status(404).json(['User not found'])
+
+  try {
+    const post = await Blog.findOneAndUpdate({ _id: id, user }, request.body, { new: true })
     if (!post) return response.status(404).json({ message: 'Not found' })
+
+    const oldLocalPath = request.file.path
+    const fileExtension = path.extname(request.file.originalname)
+    const newFileName = `post-${post._id}-${userFound.username}${fileExtension}`
+    const newFilePath = path.join(userFound.username, newFileName)
+    const newLocalPath = path.join(__dirname, 'uploads', newFilePath)
+
+    fs.renameSync(oldLocalPath, newLocalPath)
+
+    //TODO: fetch the upload image to ftp server api
+    try {
+      const url = await uploadToFTP(userFound.username, newFileName)
+      post.ImageUrl = url
+      post.save()
+    } catch (error) {
+      console.error('error uploading image to ftp server', error)
+      return response.status(500).json(['Error uploading image to FTP server'])
+    }
+
     response.json(true)
   } catch (error) {
     return response.status(500).json(['Error updating, try again later'])
