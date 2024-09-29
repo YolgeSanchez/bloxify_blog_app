@@ -17,7 +17,7 @@ export const getPosts = async (request, response) => {
 
     try {
       const posts = await Blog.find({ user })
-        .select('createdAt _id title description likes user likedBy')
+        .select('createdAt _id title description likes user likedBy imageUrl')
         .sort({ createdAt: -1 })
         .populate({ path: 'user', select: '-_id username' })
         .populate({ path: 'likedBy', select: '-_id username' })
@@ -73,6 +73,7 @@ export const getFeed = async (request, response) => {
           createdAt: post.createdAt,
           likes: post.likes,
           likedBy: post.likedBy,
+          imageUrl: post.imageUrl,
         }))
       )
     } catch (error) {
@@ -89,7 +90,7 @@ export const getPost = async (request, response) => {
 
   try {
     const post = await Blog.findById(id)
-      .select('createdAt _id title description likes user likedBy')
+      .select('createdAt _id title description likes user likedBy imageUrl')
       .populate('user', '-_id username')
       .populate({ path: 'likedBy', select: '-_id username' })
 

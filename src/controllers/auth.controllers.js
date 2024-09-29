@@ -78,7 +78,7 @@ export const profile = async (request, response) => {
   try {
     const userFound = await User.findOne({ username }).populate({
       path: 'likedBlogs',
-      select: '_id title description createdAt likes user likedBy ',
+      select: '_id title description createdAt likes user likedBy imageUrl',
       populate: [
         { path: 'user', select: '-_id username' },
         { path: 'likedBy', select: '-_id username' },
