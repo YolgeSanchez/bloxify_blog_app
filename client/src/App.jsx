@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import PostFormPage from './pages/PostFormPage.jsx'
 import LikedPostsPage from './pages/LikedPosts.jsx'
+import AvatarPage from './pages/AvatarPage.jsx'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/posts/:id" element={<PostFormPage />} />
               <Route path="/profile/:username" element={<ProfilePage />} />
               <Route path="/profile/:username/liked" element={<LikedPostsPage />} />
+              <Route path="/avatar" element={<AvatarPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
