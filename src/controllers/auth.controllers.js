@@ -103,7 +103,7 @@ export const avatar = async (request, response) => {
 }
 
 // logout
-export const logout = async (request, response) => {
+export const logout = async (_, response) => {
   response.clearCookie('token')
   response.json(['logged out'])
 }
