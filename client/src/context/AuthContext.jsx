@@ -1,6 +1,14 @@
 import { createContext, useState, useContext, useEffect } from 'react'
-import { registerCall, loginCall, profileCall, verifyToken, logoutCall } from '../api/auth.js'
+import {
+  registerCall,
+  loginCall,
+  profileCall,
+  verifyToken,
+  logoutCall,
+  avatarCall,
+} from '../api/auth.js'
 import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 export const AuthContext = createContext()
 
@@ -17,6 +25,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   const registerUser = async (user) => {
     try {
@@ -24,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       const data = response.data
       setUser(data)
       setIsAuthenticated(true)
+      navigate('/')
     } catch (error) {
       setErrors(error.response.data)
     }
@@ -37,6 +47,17 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true)
     } catch (error) {
       setErrors(error.response.data)
+    }
+  }
+
+  const uploadAvatar = async (avatar) => {
+    try {
+      const response = await avatarCall(avatar)
+      const data = response.data
+      return data
+    } catch (err) {
+      console.log(err)
+      setErrors(err.response.data)
     }
   }
 
@@ -111,6 +132,7 @@ export const AuthProvider = ({ children }) => {
         registerUser,
         loginUser,
         getProfile,
+        uploadAvatar,
         logout,
         user,
         isAuthenticated,
