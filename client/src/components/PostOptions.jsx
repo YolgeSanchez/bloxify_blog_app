@@ -14,7 +14,7 @@ export default function PostOptions({ post, deletePost }) {
   const { _id } = post
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="self-start">
         <Button variant="ghost" size="icon" className="rounded-full">
           <EllipsisVertical className="h-5 w-5" />
           <span className="sr-only">More options</span>
