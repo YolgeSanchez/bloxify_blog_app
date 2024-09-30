@@ -3,6 +3,10 @@ import jwt from 'jsonwebtoken'
 import User from '../models/user.model.js'
 import encrypt from '../libs/SHA256.js'
 import { TOKEN_SECRET } from '../config.js'
+import path from 'path'
+import { __dirname } from '../../index.js'
+import fs from 'fs'
+import uploadToFTP from '../libs/uploadToFTP.js'
 
 // login
 export const login = async (request, response) => {
@@ -63,6 +67,39 @@ export const register = async (request, response) => {
     console.log(error)
     response.status(500).json(['Error creating user, try again later'])
   }
+}
+
+// avatar
+export const avatar = async (request, response) => {
+  if (!request.file) return response.sendStatus(400)
+
+  // user info
+  const username = request.user.username
+  const _id = request.user.id
+
+  const user = await User.findById(_id)
+  if (!user) return response.status(404).json(['User not found'])
+
+  const oldLocalPath = request.file.path
+  const fileExtension = path.extname(request.file.originalname)
+  const newFileName = `avatar-${user.username}${fileExtension}`
+  const newFilePath = path.join(user.username, newFileName)
+  const newLocalPath = path.join(__dirname, 'uploads', newFilePath)
+
+  fs.renameSync(oldLocalPath, newLocalPath)
+
+  //TODO: fetch the upload image to ftp server api
+  try {
+    const url = await uploadToFTP(user.username, newFileName)
+    user.avatarUrl = url
+    user.save()
+    response.status(200).json(user.avatarUrl)
+  } catch (error) {
+    console.error('error uploading image to ftp server', error)
+    return response.status(500).json(['Error uploading image to FTP server'])
+  }
+
+  // in case all good return a good response
 }
 
 // logout
