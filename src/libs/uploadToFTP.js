@@ -42,6 +42,7 @@ const uploadToFTP = async (user, file) => {
 
     // return http path to get the image on the web browser
     const httpPath = `http://localhost:3000/api/${remotePath}`
+    client.close()
     return httpPath
   } catch (err) {
     console.error(err)
