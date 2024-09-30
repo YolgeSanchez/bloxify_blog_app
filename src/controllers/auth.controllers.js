@@ -71,7 +71,7 @@ export const register = async (request, response) => {
 
 // avatar
 export const avatar = async (request, response) => {
-  if (!request.file) return response.sendStatus(400)
+  if (!request.file) return response.status(400).json(['File is required'])
 
   // user info
   const username = request.user.username
