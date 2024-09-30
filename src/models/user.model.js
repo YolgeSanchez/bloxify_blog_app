@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     ref: 'Blog',
     default: [],
   },
+  avatarUrl: {
+    type: String,
+    default: null,
+  },
 })
 
 export default mongoose.model('User', userSchema)
