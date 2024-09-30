@@ -39,11 +39,21 @@ function PostFormPage() {
   const onSubmit = handleSubmit(async (data) => {
     if (params.id) {
       const id = params.id
-      const response = await updatePost(id, data)
+      const formData = new FormData()
+      formData.append('title', data.title)
+      formData.append('description', data.description)
+      formData.append('image', data.image[0])
+
+      const response = await updatePost(id, formData)
       if (response) navigate(`/profile/${user.username}`)
     } else {
       try {
-        const response = await addPost(data)
+        const formData = new FormData()
+        formData.append('title', data.title)
+        formData.append('description', data.description)
+        formData.append('image', data.image[0])
+
+        const response = await addPost(formData)
         if (response) navigate(`/profile/${user.username}`)
       } catch (error) {
         console.error('error creating the new post', error)
@@ -54,13 +64,13 @@ function PostFormPage() {
   return (
     <>
       <NavBar />
-      <div className="pb-16 h-[calc(100vh-3rem)] flex items-center justify-center md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:min-h-screen ">
+      <div className="pb-16 h-[calc(100vh-3rem)] flex items-center justify-center md:absolute md:left-48 md:top-0 md:mt-8 md:w-[calc(100%-12rem)] md:min-h-screen ">
         <Card className="w-[85%] md:w-full max-w-2xl">
           <CardHeader>
             <CardTitle className="text-2xl">Create New Blog Post</CardTitle>
           </CardHeader>
           <form onSubmit={onSubmit}>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-6">
               {postErrors.map((error, index) => (
                 <Alert variant="destructive" className="mb-4" key={index}>
                   <AlertDescription className="md:text-lg">{error}</AlertDescription>
@@ -86,11 +96,17 @@ function PostFormPage() {
                   placeholder="Enter post description"
                   {...register('description', { required: true })}
                   autoComplete="off"
-                  className="min-h-[100px] md:min-h-[250px] md:text-md"
+                  className="min-h-[100px] md:min-h-[160px] md:text-md"
                 />
                 {errors.description && (
                   <p className="text-red-500 md:text-md">Description is required</p>
                 )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="image" className="md:text-lg">
+                  Image
+                </Label>
+                <Input type="file" {...register('image')} />
               </div>
             </CardContent>
             <CardFooter>
