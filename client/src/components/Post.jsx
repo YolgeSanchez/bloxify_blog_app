@@ -24,6 +24,7 @@ export function Post({ post: initialPost, deletePost, onProfile = false }) {
     user,
     likedBy,
     likes: likesCount,
+    imageUrl,
   } = post
   const owner = currentUser.username == user.username
   const author = user.username
@@ -33,7 +34,8 @@ export function Post({ post: initialPost, deletePost, onProfile = false }) {
   }
 
   return (
-    <Card className="w-full max-w-xl mx-auto md:p-4 mb-5">
+    <Card className="w-full max-w-xl mx-auto md:p-4 md:pt-7 mb-5">
+      <img src={imageUrl} className="md:rounded-md w-full md:w-[95%] mx-auto" alt={imageUrl} />
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold">{title}</h2>
