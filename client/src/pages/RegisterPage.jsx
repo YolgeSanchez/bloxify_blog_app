@@ -31,6 +31,7 @@ function RegisterPage() {
 
   const onSubmit = handleSubmit(async (user) => {
     await registerUser(user)
+    navigate('/avatar')
   })
 
   return (

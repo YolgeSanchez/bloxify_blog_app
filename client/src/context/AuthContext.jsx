@@ -8,7 +8,6 @@ import {
   avatarCall,
 } from '../api/auth.js'
 import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
 
 export const AuthContext = createContext()
 
@@ -25,7 +24,6 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [errors, setErrors] = useState([])
   const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
 
   const registerUser = async (user) => {
     try {
@@ -33,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       const data = response.data
       setUser(data)
       setIsAuthenticated(true)
-      navigate('/')
     } catch (error) {
       setErrors(error.response.data)
     }
@@ -52,11 +49,13 @@ export const AuthProvider = ({ children }) => {
 
   const uploadAvatar = async (avatar) => {
     try {
+      console.log(avatar)
       await avatarCall(avatar)
-      navigate('/')
+      return true
     } catch (err) {
-      console.log(err)
+      console.log(err.response.data)
       setErrors(err.response.data)
+      return false
     }
   }
 
