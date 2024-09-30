@@ -52,9 +52,8 @@ export const AuthProvider = ({ children }) => {
 
   const uploadAvatar = async (avatar) => {
     try {
-      const response = await avatarCall(avatar)
-      const data = response.data
-      return data
+      await avatarCall(avatar)
+      navigate('/')
     } catch (err) {
       console.log(err)
       setErrors(err.response.data)
