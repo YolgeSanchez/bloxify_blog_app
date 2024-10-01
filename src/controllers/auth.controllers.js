@@ -128,6 +128,7 @@ export const profile = async (request, response) => {
       username: userFound.username,
       posts: userFound.blogsCount,
       likes: userFound.likedBlogs,
+      avatarUrl: userFound.avatarUrl,
     })
   } catch (error) {
     return response.status(404).json(['User not found'])

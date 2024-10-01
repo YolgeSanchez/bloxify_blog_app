@@ -46,10 +46,8 @@ function ProfilePage() {
   return (
     <>
       <NavBar />
-      <div className="pb-16 md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:h-full">
+      <div className="pb-16 w-full md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:h-full flex flex-col items-center justify-start">
         <div className="profile">
-          <h1>Profile</h1>
-          <p>Your profile details will be displayed here.</p>
           {Object.keys(profile).length > 0 && <Profile profile={profile} />}
         </div>
         <section className="posts">
