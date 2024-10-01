@@ -16,7 +16,7 @@ export function NavBar() {
     <aside className={`${aside.default} ${aside.md}`}>
       <div className="w-full h-full">
         <div className="py-6 pl-4 hidden md:block">
-          <h1 className="text-2xl font-bold">Instagram</h1>
+          <h1 className="text-2xl font-bold">Bloxify</h1>
         </div>
         <nav className="flex md:flex-col md:space-y-2 w-full justify-around md:justify-start">
           <SidebarItem icon={<Home size={28} />} label="Home" location="/" />
