@@ -7,12 +7,14 @@ import { usePost } from '@/context/PostContext'
 import Post from '@/components/Post'
 import Profile from '@/components/Profile'
 import NavBar from '@/components/NavBar'
+import NotFoundPage from '@/pages/NotFoundPage'
 
 function ProfilePage() {
-  const { getProfile } = useAuth()
+  const { getProfile, errors } = useAuth()
   const { getPosts, deletePost } = usePost()
   const [profile, setProfile] = useState({})
   const [posts, setPosts] = useState([])
+  const [profileErrors, setErrors] = useState([])
   const params = useParams()
 
   useEffect(() => {
@@ -32,6 +34,10 @@ function ProfilePage() {
     fetchPosts()
   }, [params.username])
 
+  useEffect(() => {
+    if (errors.length !== 0) setErrors(errors)
+  }, [errors])
+
   const handleDelete = async (id) => {
     try {
       await deletePost(id)
@@ -45,19 +51,27 @@ function ProfilePage() {
 
   return (
     <>
-      <NavBar />
-      <div className="pb-16 w-full md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:h-full flex flex-col items-center justify-start">
-        <div className="profile">
-          {Object.keys(profile).length > 0 && <Profile profile={profile} />}
-        </div>
-        <section className="posts">
-          {posts.length == 0 && <p>No blogs posted yet</p>}
-          {posts.length > 0 &&
-            posts.map((post) => {
-              return <Post key={post._id} post={post} onProfile={true} deletePost={handleDelete} />
-            })}
-        </section>
-      </div>
+      {profileErrors.length !== 0 ? (
+        <NotFoundPage />
+      ) : (
+        <>
+          <NavBar />
+          <div className="pb-16 w-full md:absolute md:left-48 md:top-0 md:w-[calc(100%-12rem)] md:h-full flex flex-col items-center justify-start">
+            <div className="profile">
+              {Object.keys(profile).length > 0 && <Profile profile={profile} />}
+            </div>
+            <section className="posts">
+              {posts.length == 0 && <p>No blogs posted yet</p>}
+              {posts.length > 0 &&
+                posts.map((post) => {
+                  return (
+                    <Post key={post._id} post={post} onProfile={true} deletePost={handleDelete} />
+                  )
+                })}
+            </section>
+          </div>
+        </>
+      )}
     </>
   )
 }
