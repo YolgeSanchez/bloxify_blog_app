@@ -16,8 +16,7 @@ Bloxify is a full-stack blog application built with Node.js, Express.js, and Rea
 ### Clone the Repository
 
 ```
-git clone https://github.com/YolgeSanchez/BlogApp.git
-
+git clone https://github.com/YolgeSanchez/Bloxify_blog_app.git
 ```
 
 ### Install Dependencies
