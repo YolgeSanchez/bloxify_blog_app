@@ -114,11 +114,11 @@ export const AuthProvider = ({ children }) => {
         setUser(data)
         setIsAuthenticated(true)
         setLoading(false)
-      } catch (error) {
-        setErrors(error.response.data)
+      } catch (_error) {
+        console.log(_error)
         setIsAuthenticated(false)
         setUser(null)
-        setLoading(false)(false)
+        setLoading(false)
       }
     }
     checkToken()
