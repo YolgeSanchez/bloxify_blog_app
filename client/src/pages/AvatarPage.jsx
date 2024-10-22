@@ -16,7 +16,7 @@ export function AvatarPage() {
   const [avatarUrl, setAvatarUrl] = useState('')
   const [file, setFile] = useState(null)
   const { uploadAvatar, errors: registerErrors } = useAuth()
-  const { register, handleSubmit } = useForm()
+  const { handleSubmit } = useForm()
   const navigate = useNavigate()
 
   // changing the file
@@ -59,8 +59,8 @@ export function AvatarPage() {
 
             <div className="flex items-center justify-center w-full">
               <Label
-                htmlFor="avatar-upload"
-                className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-background"
+                htmlFor="file-upload"
+                className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-background hover:bg-neutral-900"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-3 text-gray-400" />
@@ -70,7 +70,7 @@ export function AvatarPage() {
                   <p className="text-xs text-gray-500">Only JPG</p>
                 </div>
                 <Input
-                  {...register('image')}
+                  id="file-upload"
                   type="file"
                   className="hidden"
                   onChange={handleAvatarUpload}
